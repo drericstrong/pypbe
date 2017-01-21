@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/pypbe.svg)](https://badge.fury.io/py/pypbe)
+
 # PyPBE
 ### Python Point Buy Equivalence Calculator
 
