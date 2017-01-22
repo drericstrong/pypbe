@@ -9,6 +9,8 @@
 
 Some GMs prefer to let their players choose between rolling for their ability scores and letting them use the Point Buy system. However, not all random rolling methods are created equal. Some (4d6, drop lowest) clearly give higher average results than others (3d6). PyPBE is designed to calculate and visualize the distribution of a specified ability score rolling method, which may provide useful information for decision-making.
 
+The stats that PyPBE calculates aren't the "raw" values of the roll (e.g. 3 through 18), they're the "Point Buy Equivalent" of 6 rolls using that rolling method. For instance, if you roll 3d6 six times, you might get 10, 12, 8, 13, 7, 9, which has a Point Buy Equivalent of -2 (0+2-2+3-4-1) using the PF point buy scheme. Do this thousands/millions of times, and you get a distribution. The "mean" is the fair Point Buy you should select for that rolling method, and 90% of the time, the random roll PBE will fall between the 5%/95% values. The Typical Array gives the most likely stat array, using that random rolling method.
+
 PyPBE can be installed using pip:
 
 > pip install pypbe
