@@ -1,6 +1,8 @@
+# PyPBE
+
+![PyePBE](https://github.com/drericstrong/pypbe/blob/master/images/pypbe_small.jpg)
 [![PyPI version](https://badge.fury.io/py/pypbe.svg)](https://badge.fury.io/py/pypbe)
 
-# PyPBE
 ### Python Point Buy Equivalence Calculator
 
 **Description**: PyPBE is a resource for tabletop gaming which allows Gamemasters (GM) to fairly select which random rolling method is closest to an equivalent Point Buy value.
