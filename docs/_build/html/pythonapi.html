@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>5. Python API &mdash; PyPBE 0.12 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PyPBE 0.12 documentation" href="index.html"/>
+        <link rel="next" title="Change Log" href="changelog.html"/>
+        <link rel="prev" title="4. Online Notebook" href="onlinenotebook.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyPBE
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.12
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">2. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gui.html">3. Graphical User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onlinenotebook.html">4. Online Notebook</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-examples">Basic Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-parameters">Custom Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyPBE</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>5. Python API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/pythonapi.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="python-api">
+<h1>5. Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h1>
+<p>Random rolling methods can be investigated programmatically with the Python API.</p>
+<div class="section" id="basic-examples">
+<h2>Basic Examples<a class="headerlink" href="#basic-examples" title="Permalink to this headline">¶</a></h2>
+<p>Import the PBE class into your program, initializing it using the number and type of dice to roll, then use the &#8220;roll_mc&#8221; method to investigate the distribution. The results can be visualized using the &#8220;plot_histogram&#8221; method, and a data row summary can be generated using the &#8220;get_results&#8221; method.</p>
+<p>For example, running a simulation for three 6-sided dice (3d6), rolled for 6 attributes, can be accomplished using the following code:</p>
+<p>&gt; from pypbe import PBE</p>
+<p>&gt; alg = PBE(3,6)</p>
+<p>&gt; alg.roll_mc()</p>
+<p>&gt; alg.plot_histogram()</p>
+<p>&gt; results = alg.get_results()</p>
+<p>The &#8220;plot_histogram&#8221; function will generate a plot that looks like this:</p>
+<img alt="https://github.com/drericstrong/pypbe/blob/master/images/4d6_example.png?raw=true" src="https://github.com/drericstrong/pypbe/blob/master/images/4d6_example.png?raw=true" />
+<p>The top part of the plot shows the distribution of each dice roll, ranked from lowest (Roll 1) to highest (usually Roll 6). Think about it this way- the mean value of 6 sets of 3d6, repeated many times, will tend towards 10.5 (each six-sided dice has a mean of 3.5, so 3.5 times 3 equals 10.5). However, if you order the 6 sets from lowest to highest, you&#8217;ll notice that the lowest roll tends to be lower than 10.5, and the highest roll tends to be higher than 10.5. The plot shows the expected value for each ranked roll, which can be interpreted as the &#8220;typical&#8221; stat array for this rolling method. The 5th and 95th percentiles are given in brackets. For instance, [5,11] means that 90% of the distribution is between 5 and 11.</p>
+<p>The distribution of the Point Buy value is shown in the bottom plot by mapping the results of each dice roll to a Point Buy value. The default mapping is: {3:-16, 4:-12, 5:-9, 6:-6, 7:-4, 8:-2, 9:-1, 10:0, 11:1, 12:2, 13:3, 14:5, 15:7, 16:10, 17:13, 18:17}. The mean, standard deviation, 5th, and 95th percentiles are shown on the figure. You can interpret the mean of the Point Buy distribution as the &#8220;Point Buy Equivalent&#8221;- the Point Buy value that is most fair to choose as the equivalent for the ability score rolling method.</p>
+<p>The &#8220;roll_mc&#8221; and &#8220;plot_histogram&#8221; methods can be chained, like this:</p>
+<p>&gt; results = alg.roll_mc().plot_histogram().get_results()</p>
+</div>
+<div class="section" id="custom-parameters">
+<h2>Custom Parameters<a class="headerlink" href="#custom-parameters" title="Permalink to this headline">¶</a></h2>
+<p>More complicated scenarios can be run by adjusting the following user-specified parameters:</p>
+<ul class="simple">
+<li><strong>add_val</strong>: The value to add to the dice roll. (i.e. this is the &#8220;8&#8221; in &#8220;1d10+8&#8221;)</li>
+<li><strong>num_ability</strong>: The number of ability scores to generate. Default is 6 ability scores.</li>
+<li><strong>num_arrays</strong>: The number of ability scores arrays that can be chosen from. For instance, 2 arrays might allow the player to choose between [12,10,6,11,15,17] and [6,9,12,18,15,10]</li>
+<li><strong>reroll</strong>: Allow dice re-rolling, cumulatively. &#8220;0&#8221; is no re-rolls, &#8220;1&#8221; is re-rolling 1s, and &#8220;2&#8221; is re-rolling 1s and 2s, and so on.</li>
+<li><strong>best_dice</strong>: If you want to roll more dice than you need and then take the best N results. E.g. &#8220;Roll 4d6 and drop the lowest roll&#8221; would require a &#8220;3&#8221; here.</li>
+<li><strong>best_ability</strong>: If you want to roll more abilities than you need and then take the best N results. E.g. &#8220;Roll 3d6 seven times, and take the best six times&#8221; would require a &#8220;6&#8221; here. Must be less than or equal to num_ability.</li>
+<li><strong>pbe_map</strong>: This determines how much each ability score will &#8220;cost&#8221; in the Point Buy system. You supply a string here, and the default is Pathfinder. You can (currently) select Pathfinder: &#8216;pf&#8217;, D&amp;D 3e: &#8216;3e&#8217;, D&amp;D 4e: &#8216;4e&#8217;, or D&amp;D 5e: &#8216;5e&#8217;</li>
+</ul>
+<p>For instance, running a simulation for 2d6+6, with the best 6 out of 7 ability scores, rerolling 1s, and choosing from 3 arrays, should be initialized like this:</p>
+<p>&gt; alg = PBE(2, 6, add_val=6, num_ability=7, best_ability=6, reroll=1, num_arrays=3)</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Change Log" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="onlinenotebook.html" class="btn btn-neutral" title="4. Online Notebook" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Eric Strong.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.12',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

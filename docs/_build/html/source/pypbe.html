@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pypbe package &mdash; PyPBE 0.12 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="PyPBE 0.12 documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyPBE
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.12
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">2. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gui.html">3. Graphical User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../onlinenotebook.html">4. Online Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pythonapi.html">5. Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyPBE</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>pypbe package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/pypbe.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pypbe-package">
+<h1>pypbe package<a class="headerlink" href="#pypbe-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pypbe.core">
+<span id="pypbe-core-module"></span><h2>pypbe.core module<a class="headerlink" href="#module-pypbe.core" title="Permalink to this headline">¶</a></h2>
+<p>pypbe
+Python Point Buy Equivalent
+~~~~~~~~~~~~~~~
+Intended for tabletop rpgs such as Pathfinder or D&amp;D, this module contains
+code to run a Monte Carlo simulation to determine the Point Buy Equivalent
+(PBE) for a given type of ability score rolling method, such as &#8220;Roll 4d6
+and drop the lowest&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
+<li>2017 Eric Strong.</li>
+</ol>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">Refer to LICENSE.txt for more information.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="pypbe.core.PBE">
+<em class="property">class </em><code class="descclassname">pypbe.core.</code><code class="descname">PBE</code><span class="sig-paren">(</span><em>num_dice</em>, <em>dice_type</em>, <em>add_val=0</em>, <em>num_ability=6</em>, <em>num_arrays=1</em>, <em>reroll=0</em>, <em>best_dice=None</em>, <em>best_ability=6</em>, <em>pbe_map='pf'</em>, <em>custom_pbe_map=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Initializes a Monte Carlo simulation to determine the equivalent
+Point Buy of an ability score rolling method.</p>
+<dl class="method">
+<dt id="pypbe.core.PBE.get_results">
+<code class="descname">get_results</code><span class="sig-paren">(</span><em>title_prefix=''</em>, <em>title_override=''</em>, <em>round_digits=2</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE.get_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a summary of the results as an array, which might be
+useful for writing the results of multiple algorithms to a table.
+NOTE- This method must be called AFTER &#8220;roll_mc&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>title_prefix</strong> &#8211; If desired, prefix the title (such as &#8220;Alg 1&#8221;)</li>
+<li><strong>title_override</strong> &#8211; Override the title string entirely</li>
+<li><strong>round_digits</strong> &#8211; the number of digits to round to</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple of the raw array results and PBE results, as:
+[Description, Typical Array, Mean, Std, 5%, 95%]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pypbe.core.PBE.plot_histogram">
+<code class="descname">plot_histogram</code><span class="sig-paren">(</span><em>title_prefix=''</em>, <em>title_override=''</em>, <em>figsize=(10</em>, <em>8)</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE.plot_histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a histogram of the results after the Monte Carlo simulation is
+run. NOTE- This method must be called AFTER &#8220;roll_mc&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>title_prefix</strong> &#8211; If desired, prefix the title (such as &#8220;Alg 1&#8221;)</li>
+<li><strong>title_override</strong> &#8211; Override the title string entirely</li>
+<li><strong>figsize</strong> &#8211; The size of the histogram plot</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pypbe.core.PBE.roll_mc">
+<code class="descname">roll_mc</code><span class="sig-paren">(</span><em>num_hist=1000000</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE.roll_mc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the initialized Monte Carlo simulation to determine the equivalent
+Point Buy of an ability score rolling method. NOTE- This method must
+be called BEFORE &#8220;plot_histogram&#8221;.</p>
+<p>This method returns self, so you can stack the &#8220;plot_histogram&#8221; and
+&#8220;get_results&#8221; methods, like pbe1.roll_mc().plot_histogram()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num_hist</strong> &#8211; Number of Monte Carlo histories to run. Suggest 10**6</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pypbe.core.randint">
+<code class="descclassname">pypbe.core.</code><code class="descname">randint</code><span class="sig-paren">(</span><em>low</em>, <em>high=None</em>, <em>size=None</em>, <em>dtype='l'</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.randint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return random integers from <cite>low</cite> (inclusive) to <cite>high</cite> (exclusive).</p>
+<p>Return random integers from the &#8220;discrete uniform&#8221; distribution of
+the specified dtype in the &#8220;half-open&#8221; interval [<cite>low</cite>, <cite>high</cite>). If
+<cite>high</cite> is None (the default), then results are from [0, <cite>low</cite>).</p>
+<dl class="docutils">
+<dt>low</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Lowest (signed) integer to be drawn from the distribution (unless
+<code class="docutils literal"><span class="pre">high=None</span></code>, in which case this parameter is the <em>highest</em> such
+integer).</dd>
+<dt>high</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>If provided, one above the largest (signed) integer to be drawn
+from the distribution (see above for behavior if <code class="docutils literal"><span class="pre">high=None</span></code>).</dd>
+<dt>size</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or tuple of ints, optional</span><dd>Output shape.  If the given shape is, e.g., <code class="docutils literal"><span class="pre">(m,</span> <span class="pre">n,</span> <span class="pre">k)</span></code>, then
+<code class="docutils literal"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">k</span></code> samples are drawn.  Default is None, in which case a
+single value is returned.</dd>
+<dt>dtype</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dtype, optional</span><dd><p class="first">Desired dtype of the result. All dtypes are determined by their
+name, i.e., &#8216;int64&#8217;, &#8216;int&#8217;, etc, so byteorder is not available
+and a specific precision may have different C types depending
+on the platform. The default value is &#8216;np.int&#8217;.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 1.11.0.</span></p>
+</div>
+</dd>
+</dl>
+<dl class="docutils">
+<dt>out</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or ndarray of ints</span><dd><cite>size</cite>-shaped array of random integers from the appropriate
+distribution, or a single such random int if <cite>size</cite> not provided.</dd>
+</dl>
+<dl class="docutils">
+<dt>random.random_integers</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">similar to <cite>randint</cite>, only for the closed</span><dd>interval [<cite>low</cite>, <cite>high</cite>], and 1 is the lowest value if <cite>high</cite> is
+omitted. In particular, this other one is the one to use to generate
+uniformly distributed discrete non-integers.</dd>
+</dl>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">array([1, 0, 0, 0, 1, 1, 0, 0, 1, 0])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])</span>
+</pre></div>
+</div>
+<p>Generate a 2 x 4 array of ints between 0 and 4, inclusive:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">array([[4, 0, 2, 1],</span>
+<span class="go">       [3, 2, 2, 0]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pypbe">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pypbe" title="Permalink to this headline">¶</a></h2>
+<p>pypbe
+Python Point Buy Equivalent
+~~~~~~~~~~~~~~~
+Intended for tabletop rpgs such as Pathfinder or D&amp;D, this module contains
+code to run a Monte Carlo simulation to determine the Point Buy Equivalent
+(PBE) for a given type of ability score rolling method, such as &#8220;Roll 4d6
+and drop the lowest&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
+<li>2017 Eric Strong.</li>
+</ol>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">Refer to LICENSE.txt for more information.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="pypbe.randint">
+<code class="descclassname">pypbe.</code><code class="descname">randint</code><span class="sig-paren">(</span><em>low</em>, <em>high=None</em>, <em>size=None</em>, <em>dtype='l'</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.randint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return random integers from <cite>low</cite> (inclusive) to <cite>high</cite> (exclusive).</p>
+<p>Return random integers from the &#8220;discrete uniform&#8221; distribution of
+the specified dtype in the &#8220;half-open&#8221; interval [<cite>low</cite>, <cite>high</cite>). If
+<cite>high</cite> is None (the default), then results are from [0, <cite>low</cite>).</p>
+<dl class="docutils">
+<dt>low</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Lowest (signed) integer to be drawn from the distribution (unless
+<code class="docutils literal"><span class="pre">high=None</span></code>, in which case this parameter is the <em>highest</em> such
+integer).</dd>
+<dt>high</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>If provided, one above the largest (signed) integer to be drawn
+from the distribution (see above for behavior if <code class="docutils literal"><span class="pre">high=None</span></code>).</dd>
+<dt>size</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or tuple of ints, optional</span><dd>Output shape.  If the given shape is, e.g., <code class="docutils literal"><span class="pre">(m,</span> <span class="pre">n,</span> <span class="pre">k)</span></code>, then
+<code class="docutils literal"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">k</span></code> samples are drawn.  Default is None, in which case a
+single value is returned.</dd>
+<dt>dtype</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dtype, optional</span><dd><p class="first">Desired dtype of the result. All dtypes are determined by their
+name, i.e., &#8216;int64&#8217;, &#8216;int&#8217;, etc, so byteorder is not available
+and a specific precision may have different C types depending
+on the platform. The default value is &#8216;np.int&#8217;.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 1.11.0.</span></p>
+</div>
+</dd>
+</dl>
+<dl class="docutils">
+<dt>out</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or ndarray of ints</span><dd><cite>size</cite>-shaped array of random integers from the appropriate
+distribution, or a single such random int if <cite>size</cite> not provided.</dd>
+</dl>
+<dl class="docutils">
+<dt>random.random_integers</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">similar to <cite>randint</cite>, only for the closed</span><dd>interval [<cite>low</cite>, <cite>high</cite>], and 1 is the lowest value if <cite>high</cite> is
+omitted. In particular, this other one is the one to use to generate
+uniformly distributed discrete non-integers.</dd>
+</dl>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">array([1, 0, 0, 0, 1, 1, 0, 0, 1, 0])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])</span>
+</pre></div>
+</div>
+<p>Generate a 2 x 4 array of ints between 0 and 4, inclusive:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">array([[4, 0, 2, 1],</span>
+<span class="go">       [3, 2, 2, 0]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Eric Strong.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.12',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

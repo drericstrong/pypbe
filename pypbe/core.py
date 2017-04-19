@@ -14,7 +14,6 @@
 
 import numpy as np
 import seaborn as sns
-import bottleneck as bn
 import matplotlib.pyplot as plt
 from numpy.random import randint
 
@@ -84,7 +83,8 @@ class PBE:
         vmap = {3: -16, 4: -12, 5: -9, 6: -6, 7: -4, 8: -2, 9: -1, 10: 0,
                 11: 1, 12: 2, 13: 3, 14: 5, 15: 7, 16: 10, 17: 13, 18: 17}
         # Now, go through and match the user string with all selections
-        if map_string is "5e":
+        if (map_string == "3e") | (map_string == "3.5e") | \
+                (map_string == "5e"):
             vmap = {3: -7, 4: -5, 5: -3, 6: -2, 7: -1, 8: 0, 9: 1, 10: 2,
                     11: 3, 12: 4, 13: 5, 14: 6, 15: 8, 16: 10, 17: 13, 18: 16}
         return vmap
@@ -100,10 +100,9 @@ class PBE:
             # Generate a matrix of random integers [num_hist] by [num_dice]
             attr = randint(reroll + 1, dice_type + 1,
                            size=(num_hist, num_dice))
-            # Sorts and takes the top [best_dice] values. Partition sort is
-            # quicker, but it only works for sorting the best N values
+            # Sorts and takes the top [best_dice] values.
             if best_dice < num_dice:
-                attr = bn.partsort(attr, best_dice, axis=1)[:, -best_dice:]
+                attr = np.sort(attr, axis=1)[:, -best_dice:]
             # Sum the rolls together, and add the [add_val]
             result = np.add(attr.sum(axis=1), add_val)
             abilities.append(result)
@@ -182,6 +181,30 @@ class PBE:
     @staticmethod
     def _construct_title(num_dice, dice_type, add_val, num_ability,
                          best_ability, best_dice, reroll, num_arrays):
+        # Construct the
+        dice = "Sum {}d{}".format(num_dice, dice_type)
+        if add_val > 0:
+            dice += "+{}".format(str(add_val))
+        if best_dice < num_dice:
+            dice += "k{}".format(str(best_dice))
+        ability = ", {}".format(str(num_ability))
+        if best_ability < num_ability:
+            ability += "k{}".format(str(best_ability))
+        ability += " Abilities"
+        array = ""
+        if num_arrays > 1:
+            array += ", {} Arrays".format(str(num_arrays))
+        rerolls = ""
+        if reroll > 0:
+            rerolls = ", Reroll "
+            for ii in range(0, reroll):
+                rerolls += str(ii + 1) + "s/"
+            rerolls = rerolls[:-1]
+        return "".join([dice, ability, array, rerolls])
+
+    @staticmethod
+    def _construct_title_old(num_dice, dice_type, add_val, num_ability,
+                             best_ability, best_dice, reroll, num_arrays):
         # This function will construct an appropriate title for the
         # histogram using all the user-configured settings
         first = "Sum "
@@ -273,6 +296,7 @@ class PBE:
         ax1.set_ylabel('Raw Values Probability')
         ax2.legend(loc='upper left')
         ax2.set_ylabel('Point Buy Equivalent Probability')
+        return f
 
     def roll_mc(self, num_hist=10**6):
         """
@@ -298,9 +322,6 @@ class PBE:
         Plots a histogram of the results after the Monte Carlo simulation is
         run. NOTE- This method must be called AFTER "roll_mc".
 
-        This method returns self, so you can stack the "get_results" method,
-        like pbe1.roll_mc().plot_histogram().get_results()
-
         :param title_prefix: If desired, prefix the title (such as "Alg 1")
         :param title_override: Override the title string entirely
         :param figsize: The size of the histogram plot
@@ -314,8 +335,8 @@ class PBE:
                 self.best_ability, self.best_dice, self.reroll,
                 self.num_arrays)
         # Construct the histogram
-        self._plot_hist(self.arr_res, self.pbe_res, title, figsize)
-        return self
+        f = self._plot_hist(self.arr_res, self.pbe_res, title, figsize)
+        return f
 
     def get_results(self, title_prefix="", title_override="",
                     round_digits=2):
