@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>4. Online Notebook &mdash; PyPBE 0.12 documentation</title>
+  <title>4. Jupyter Notebook &mdash; PyPBE 0.13 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="PyPBE 0.12 documentation" href="index.html"/>
+    <link rel="top" title="PyPBE 0.13 documentation" href="index.html"/>
         <link rel="next" title="5. Python API" href="pythonapi.html"/>
         <link rel="prev" title="3. Graphical User Interface" href="gui.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.12
+                0.13
               </div>
             
           
@@ -94,7 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">2. Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gui.html">3. Graphical User Interface</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Online Notebook</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Jupyter Notebook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pythonapi.html">5. Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 </ul>
@@ -141,13 +141,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>4. Online Notebook</li>
+      <li>4. Jupyter Notebook</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/onlinenotebook.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/notebook.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -160,24 +160,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="online-notebook">
-<h1>4. Online Notebook<a class="headerlink" href="#online-notebook" title="Permalink to this headline">¶</a></h1>
-<p>The PBE Online Notebook allows the user to run PyPBE interactively in a Jupyter notebook on GitHub. Navigate to this link and follow the instructions in the notebook:</p>
-<p><a class="reference external" href="https://github.com/drericstrong/pypbe/pbe_notebook/PBENotebook.ipynb">https://github.com/drericstrong/pypbe/pbe_notebook/PBENotebook.ipynb</a></p>
-<p>Running the notebook interactively requires you to install Python 3, the latest version of which can be found here:</p>
+  <div class="section" id="jupyter-notebook">
+<h1>4. Jupyter Notebook<a class="headerlink" href="#jupyter-notebook" title="Permalink to this headline">¶</a></h1>
+<p>The PBE Jupyter Notebook allows the user to run PyPBE interactively in a Jupyter notebook. Navigate to this link and follow the instructions in the notebook:</p>
+<p><a class="reference external" href="https://github.com/drericstrong/pypbe/blob/master/pbe_notebook/PBENotebook.ipynb">https://github.com/drericstrong/pypbe/blob/master/pbe_notebook/PBENotebook.ipynb</a></p>
+<p>Running this notebook interactively requires you to install Python 3, the latest version of which can be found here:</p>
 <p><a class="reference external" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a></p>
+<p>Alternatively, if you&#8217;re having trouble getting these instructions to work, you may want to download the scientific Anaconda package (preferred, but larger size):</p>
+<p><a class="reference external" href="https://www.continuum.io/downloads">https://www.continuum.io/downloads</a></p>
 <p>Once Python 3 is installed, the following Python modules are also required:</p>
 <ul class="simple">
+<li>ipywidgets</li>
+<li>jupyter</li>
 <li>numpy</li>
 <li>matplotlib</li>
 <li>seaborn</li>
 <li>pypbe</li>
 </ul>
-<p>The &#8220;install.bat&#8221; file in that base directory can be used to install these modules automatically using pip (assuming that you are on Windows). Just double-click on the batch file to run it.</p>
-<p>Otherwise, you can install these modules by opening a command terminal and typing:</p>
+<p>The &#8220;install.bat&#8221; file in this base directory can be used to install these modules automatically using pip (assuming that you are on Windows). Just double-click on the batch file to run it. If you installed Anaconda, most of these are available by default. Otherwise, you can install these modules by opening a command terminal and typing (for each of the six MODULEs above):</p>
 <p><strong>pip install MODULE</strong></p>
-<p>for each of the four MODULEs above.</p>
-<p>After those steps are complete, run the code in the notebook by clicking the green arrow at the top, and a series of sliders and a button should appear, which allows you to investigate the results from any random character attribute rolling method you desire.</p>
+<p>After those steps are complete, download this notebook to your computer. You can run a Jupyter notebook by typing:</p>
+<p><strong>jupyter notebook</strong></p>
+<p>in a command terminal, or if you installed Anaconda, open the &#8220;Anaconda Navigator&#8221; program and click on the &#8220;Jupyter&#8221; icon. Once the Jupyter notebook interface is open (it should appear in a web browser), navigate to where you downloaded this file, and click on it.</p>
+<p>Run the following code by clicking the next &#8220;code&#8221; cell, then clicking the green arrow (&#8220;run&#8221;) above, and a series of sliders and a button should appear, which allows you to investigate the results from any random character attribute rolling method you desire.</p>
 <p>The plots will keep generating every time you click the button (so you can compare results), but you can re-run the cell using the green arrow in order to clear the current plots.</p>
 </div>
 
@@ -225,7 +230,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.12',
+            VERSION:'0.13',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

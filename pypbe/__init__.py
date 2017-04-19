@@ -2,7 +2,7 @@
 """
     pypbe
     Python Point Buy Equivalent
-    ~~~~~~~~~~~~~~~
+    -----------------------------
     Intended for tabletop rpgs such as Pathfinder or D&D, this module contains
     code to run a Monte Carlo simulation to determine the Point Buy Equivalent
     (PBE) for a given type of ability score rolling method, such as "Roll 4d6

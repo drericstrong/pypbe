@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    pypbe
-    Python Point Buy Equivalent
-    ~~~~~~~~~~~~~~~
+    pypbe.core
+    --------------
     Intended for tabletop rpgs such as Pathfinder or D&D, this module contains
     code to run a Monte Carlo simulation to determine the Point Buy Equivalent
     (PBE) for a given type of ability score rolling method, such as "Roll 4d6
@@ -20,9 +19,6 @@ from numpy.random import randint
 
 class PBE:
     """
-    pypbe.PBE
-    Point Buy Equivalent
-    ~~~~~~~~~~~~~~~~~~~~
     Initializes a Monte Carlo simulation to determine the equivalent
     Point Buy of an ability score rolling method.
     """
@@ -30,9 +26,6 @@ class PBE:
                  num_arrays=1, reroll=0, best_dice=None, best_ability=6,
                  pbe_map='pf', custom_pbe_map=None):
         """
-        pypbe.PBE
-        Point Buy Equivalent
-        ~~~~~~~~~~~~~~~~~~~~
         Initializes a Monte Carlo simulation to determine the equivalent
         Point Buy of an ability score rolling method.
 
@@ -87,6 +80,9 @@ class PBE:
                 (map_string == "5e"):
             vmap = {3: -7, 4: -5, 5: -3, 6: -2, 7: -1, 8: 0, 9: 1, 10: 2,
                     11: 3, 12: 4, 13: 5, 14: 6, 15: 8, 16: 10, 17: 13, 18: 16}
+        if map_string == "4e":
+            vmap = {3: -12, 4: -9, 5: -7, 6: -5, 7: -3, 8: -2, 9: -1, 10: 0,
+                    11: 1, 12: 2, 13: 3, 14: 5, 15: 7, 16: 9, 17: 12, 18: 16}
         return vmap
 
     @staticmethod

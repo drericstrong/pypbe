@@ -35,6 +35,10 @@ class TestStaticPBE(unittest.TestCase):
         self.assertEqual(test3, correct2)
         test4 = PBE._find_pb_mapping('5e')
         self.assertEqual(test4, correct2)
+        test5 = PBE._find_pb_mapping('4e')
+        correct5 = {3: -12, 4: -9, 5: -7, 6: -5, 7: -3, 8: -2, 9: -1, 10: 0,
+                    11: 1, 12: 2, 13: 3, 14: 5, 15: 7, 16: 9, 17: 12, 18: 16}
+        self.assertEqual(test5, correct5)
 
     # num_hist, num_dice, dice_type, add_val, num_ability, best_dice, reroll
     def test_rollArray_numHist_length(self):
