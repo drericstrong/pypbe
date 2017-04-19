@@ -3,7 +3,7 @@
 ==========================
 The PBE Online Notebook allows the user to run PyPBE interactively in a Jupyter notebook on GitHub. Navigate to this link and follow the instructions in the notebook:
 
-https://github.com/drericstrong/pypbe/pbe_notebook/PBENotebook.ipynb
+https://github.com/drericstrong/pypbe/blob/master/pbe_notebook/PBENotebook.ipynb
 
 Running the notebook interactively requires you to install Python 3, the latest version of which can be found here:
 
