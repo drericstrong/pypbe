@@ -3,6 +3,7 @@
 ![PyePBE](https://github.com/drericstrong/pypbe/blob/master/images/pypbe_small.jpg)
 
 [![PyPI version](https://badge.fury.io/py/pypbe.svg)](https://badge.fury.io/py/pypbe)
+[![Documentation Status](https://readthedocs.org/projects/pypbe/badge/?version=latest)](http://pypbe.readthedocs.io/en/latest/?badge=latest)
 
 ### Python Point Buy Equivalence Calculator
 
