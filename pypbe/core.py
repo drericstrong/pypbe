@@ -313,7 +313,7 @@ class PBE:
         return self
 
     def plot_histogram(self, title_prefix="", title_override="",
-                       figsize=(10, 8)):
+                       figsize=(8, 6)):
         """
         Plots a histogram of the results after the Monte Carlo simulation is
         run. NOTE- This method must be called AFTER "roll_mc".
