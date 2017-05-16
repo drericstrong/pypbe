@@ -1,1 +1,0 @@
-pyuic5 pbeSim.ui -o pbeSimDesign.py
