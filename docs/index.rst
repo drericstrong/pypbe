@@ -26,6 +26,7 @@ As you work with PyPBE, you might also become concerned about the high variance 
    gui
    notebook
    pythonapi
+   bokehserver
    changelog
    
 
