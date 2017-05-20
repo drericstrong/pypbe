@@ -28,7 +28,7 @@ PyPBE uses Monte Carlo simulation to obtain its results. If you perform the abov
 PyPBE is designed for Pathfinder, 3e, 3.5e, 4e, and 5e characters. However, it allows the option to supply a custom Point Buy mapping, which means that it is applicable for any system in which the "Point Buy" concept applies. PyPBE also supports any number of attributes, although it was designed for the common 6-attribute system (strength, constitution, dexterity, intelligence, wisdom, charisma). As the number of attributes increase, note that the plots may become cluttered.
 
 ## Try It!
-A web-based simulator is running [here](pypbe.herokuapp.com).
+A web-based simulator is running [here](https://pypbe.herokuapp.com/pypbe-bk).
 
 ![PyePBE](https://github.com/drericstrong/pypbe/blob/master/images/pypbe-bk_screenshot.png)
 
