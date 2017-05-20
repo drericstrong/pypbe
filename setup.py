@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from distutils.core import setup
+
 setup(
   name='pypbe',
   packages=['pypbe'],
   version='0.15',
-  description='Module to calculate Point Buy Equivalent for Tabletop RPG',
+  description='Module to calculate the Point Buy Equivalent of a stat array for tabletop RPGs',
   author='Eric Strong',
   author_email='dr.eric.strong@gmail.com',
   url='https://github.com/drericstrong/pypbe',
