@@ -20,7 +20,7 @@ As you work with PyPBE, you might also become concerned about the high variance 
 ## Overview
 Some GMs prefer to let their players choose between rolling for their ability scores and letting them use the Point Buy system. However, not all random rolling methods are created equal. Some (4d6, drop lowest) clearly give higher average results than others (3d6). PyPBE is designed to calculate and visualize the distribution of a specified ability score rolling method, which may provide useful information for decision-making.
 
-The stats that PyPBE calculates aren't the "raw" values of the roll (e.g. typically 3 through 18), they're the "Point Buy Equivalent" of 6 rolls using that rolling method. For instance, if you roll 3d6 six times, you might get 10, 12, 8, 13, 7, 9, which has a Point Buy Equivalent of -2 (0+2-2+3-4-1) using the Pathfinder point buy scheme. 
+The stats that PyPBE calculates aren't the "raw" values of the roll (e.g. typically 3 through 18), they're the "Point Buy Equivalent" of multiple rolls using that rolling method. For instance, if you roll 3d6 six times, you might get 10, 12, 8, 13, 7, 9, which has a Point Buy Equivalent of -2 (0+2-2+3-4-1) using the Pathfinder point buy scheme. 
 
 PyPBE uses Monte Carlo simulation to obtain its results. If you perform the above process thousands/millions of times, you will get a distribution. The mean of that distribution is the fair Point Buy you should select for that rolling method, and 90% of the time, the random roll PBE will fall between the 5%/95% values. The "Typical Array" gives the most likely stat array using that random rolling method.
 
@@ -67,7 +67,9 @@ The distribution of the Point Buy value is shown in the bottom plot by mapping t
 
 The "roll_mc" and "plot_histogram" methods can be chained, like this:
 
-> results = alg.roll_mc().plot_histogram().get_results()
+> hist_plot = alg.roll_mc().plot_histogram().
+
+> res= alg.roll_mc().get_results()
 
 ## Custom Parameters
 More complicated scenarios can be run by adjusting the following user-specified parameters:
@@ -82,4 +84,4 @@ More complicated scenarios can be run by adjusting the following user-specified 
 
 For instance, running a simulation for 2d6+6, with the best 6 out of 7 ability scores, rerolling 1s, and choosing from 3 arrays, should be initialized like this:
 
-> alg = PBE(2, 6, add_val=6, num_ability=7, best_ability=6, reroll=1, num_arrays=3)
+> alg = PBE(2, 6, add_val=6, num_attributes=7, keep_attributes=6, reroll=1, num_arrays=3)
