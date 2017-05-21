@@ -23,10 +23,10 @@ As you work with PyPBE, you might also become concerned about the high variance 
 
    introduction
    gettingstarted
-   gui
-   notebook
-   pythonapi
+   pythonapi   
+   notebook  
    bokehserver
+   gui
    changelog
    
 

@@ -1,5 +1,5 @@
 ==========================
- 5. Python API
+ 3. Python API
 ==========================
 Random rolling methods can be investigated programmatically with the Python API.
 

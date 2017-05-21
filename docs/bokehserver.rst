@@ -1,4 +1,4 @@
 =============================
- 6. Bokeh Server
+ 5. Bokeh Server
 =============================
 Documentation for this feature is under construction.

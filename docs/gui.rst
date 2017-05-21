@@ -1,5 +1,5 @@
 =============================
- 3. Graphical User Interface
+ 6. Graphical User Interface
 =============================
 This feature has been moved to a separate repository. Please visit this link for more information:
 
