@@ -1,12 +1,13 @@
 ### PyPBE Bokeh Simulator
 ### Written By: Eric Strong
-### Last Updated: 2017/05/18
+### Last Updated: 2017/05/25
 
 from pypbe.core import PBE
 from bokeh.io import curdoc
 from bokeh.plotting import figure
+from bokeh.models.tools import SaveTool
 from bokeh.models.ranges import Range1d
-from bokeh.models import ColumnDataSource as CDS
+from bokeh.models import ColumnDataSource as CDS, CustomJS
 from bokeh.layouts import column, row, widgetbox
 from bokeh.models.widgets.tables import DataTable, TableColumn
 from bokeh.models.widgets import Slider, Div, Button, RadioButtonGroup
@@ -21,11 +22,11 @@ d_nd, r_nd = 3, [1, 10, 1] # Number of Dice
 d_dt, r_dt = 6, [2, 20, 1] # Dice Type
 d_kd, r_kd = 3, [1, 10, 1] # Dice to Keep
 d_av, r_av = 0, [-16, 16, 1] # Add Value
-d_na, r_na = 6, [1, 8, 1] # Number of Attributes
-d_ka, r_ka = 6, [1, 8, 1] # Attributes to Keep
+d_na, r_na = 6, [1, 20, 1] # Number of Attributes
+d_ka, r_ka = 6, [1, 10, 1] # Attributes to Keep
 d_rr, r_rr = 0, [0, 20, 1] # Rerolls
-d_nar, r_nar = 1, [1, 10, 1] # Number of Arrays
-d_hi, r_hi = 5, [3, 6, 1] # Number of Histories
+d_nar, r_nar = 1, [1, 20, 1] # Number of Arrays
+d_hi, r_hi = 4, [3, 5, 1] # Monte Carlo Histories
 d_s, d_ss = "PF", ["PF", "3e", "4e", "5e"] # Systems
 
 ###-----------------------------------------------------------------------###
@@ -37,58 +38,61 @@ d_s, d_ss = "PF", ["PF", "3e", "4e", "5e"] # Systems
 # Plots- Raw Array and PBE Histogram
 plot_console = Div(text="", width=600)
 plot_raw = figure(plot_height=350, plot_width=600, logo=None, 
-                  title="Raw Roll Probability", toolbar_location="above",
+                  title="Raw Roll Histogram", toolbar_location="above",
                   x_axis_label='Dice Roll', y_axis_label='Probability',
-                  tools="pan,save,box_zoom,wheel_zoom,hover")
+                  tools="pan,box_zoom,wheel_zoom,hover")
+plot_raw.add_tools(SaveTool(name="raw_hist.jpg"))
 plot_pbe = figure(plot_height=350, plot_width=600, logo=None, 
-                  title="Point Buy Equivalent Probability", 
+                  title="Point Buy Equivalent Histogram", 
                   toolbar_location="above", y_axis_label='Probability',
                   x_axis_label='Point Buy Equivalent', 
-                  tools="pan,save,box_zoom,wheel_zoom,hover")
+                  tools="pan,box_zoom,wheel_zoom,hover")
+plot_pbe.add_tools(SaveTool(name="pbe_hist.jpg"))
+label_logo = Div(text='<a href="https://github.com/drericstrong/pypbe">PyPBE GitHub Repository</a>')
 # Main Control Buttons
 plot_sim = Button(label="Simulate")
 plot_clear = Button(label="Clear")
-plot_ctls = column(plot_sim, plot_clear)
+plot_ctls = column(plot_sim, plot_clear, label_logo)
 # User-Configurable Parameters
-up_title = Div(text="<h3>Parameters</h3>")
+up_title = Div(text="System:")
 up_sys = RadioButtonGroup(labels=d_ss, active=0)
-up_nd = Slider(title="Number of Dice (e.g. 'X' in 'XdY+Z')", value=d_nd, 
+up_nd = Slider(title="Number of Dice ('X' in 'XdY+Z')", value=d_nd, 
                start=r_nd[0], end=r_nd[1], step=r_nd[2])
-up_dt = Slider(title="Dice Type (e.g. 'Y' in 'XdY+Z')", value=d_dt, 
+up_dt = Slider(title="Dice Type ('Y' in 'XdY+Z')", value=d_dt, 
                start=r_dt[0], end=r_dt[1], step=r_dt[2])
-up_kd = Slider(title="Dice to Keep", value=d_kd, 
+up_kd = Slider(title="Dice to Keep (roll 'XdY', keep best 'K' rolls)", value=d_kd, 
                start=r_kd[0], end=r_kd[1], step=r_kd[2])
-up_av = Slider(title="Add Value (e.g. 'Z' in 'XdY+Z')", value=d_av, 
+up_av = Slider(title="Add Value ('Z' in 'XdY+Z')", value=d_av, 
                start=r_av[0], end=r_av[1], step=r_av[2])
-up_na = Slider(title="Number of Attributes (e.g. STR, INT, WIS)", value=d_na, 
+up_na = Slider(title="Number of Attributes (STR, INT, WIS, etc.)", value=d_na, 
                start=r_na[0], end=r_na[1], step=r_na[2])
-up_ka = Slider(title="Attributes to Keep", value=d_ka, 
+up_ka = Slider(title="Attributes to Keep (best 'X' of 'Y' attrs)", value=d_ka, 
                start=r_ka[0], end=r_ka[1], step=r_ka[2])
-up_rr = Slider(title="Rerolls (reroll value if <=R)", value=d_rr, 
+up_rr = Slider(title="Rerolls (reroll if <=Value)", value=d_rr, 
                start=r_rr[0], end=r_rr[1], step=r_rr[2])
-up_nar = Slider(title="Number of Arrays", value=d_nar, 
+up_nar = Slider(title="Number of Arrays (keeping the best one)", value=d_nar, 
                 start=r_nar[0], end=r_nar[1], step=r_nar[2])
-up_hi = Slider(title="Number of Histories (10^H)", value=d_hi, 
+up_hi = Slider(title="Monte Carlo Histories (10^Value)", value=d_hi, 
                start=r_hi[0], end=r_hi[1], step=r_hi[2])
 up_ctls = widgetbox(up_title, up_sys, up_nd, up_dt, up_av, up_kd, up_na, up_ka, 
                     up_rr, up_nar, up_hi)
 # Data Tables
-dt_raw_title = Div(text="<b>Raw Rolls</b>")
+dt_raw_title = Div(text="<b>Raw Roll Statistics</b>")
 dt_raw_cols = [TableColumn(field="mvs", title="Mean"),
             TableColumn(field="stds", title="Std"),
             TableColumn(field="p5", title="5%"),
             TableColumn(field="p95", title="95%")]
 source_dt_raw = CDS()
 dt_raw = DataTable(source=source_dt_raw, columns=dt_raw_cols, editable=False,
-                   selectable=True, width=300, height=300)
-dt_pbe_title = Div(text="<b>Point Buy Equivalent</b>")
+                   selectable=True, width=300, height=260)
+dt_pbe_title = Div(text="<b>Point Buy Equivalent Statistics</b>")
 dt_pbe_cols = [TableColumn(field="mvs", title="Mean"),
                TableColumn(field="stds", title="Std"),
                TableColumn(field="p5", title="5%"),
                TableColumn(field="p95", title="95%")]
 source_dt_pbe = CDS()
 dt_pbe = DataTable(source=source_dt_pbe, columns=dt_pbe_cols, editable=False,
-                   selectable=True, width=300)
+                   selectable=True, width=300, height=250)
 
 ###-----------------------------------------------------------------------###
 ###----------------------PBE CALCULATION FUNCTIONS------------------------###
@@ -176,6 +180,8 @@ source_roll6 = CDS(data=dict(x=range(0,len(d_arr["raw_bins"][5])),
                              y=d_arr["raw_bins"][5]))
 source_roll7 = CDS(data=dict(x=[], y=[]))
 source_roll8 = CDS(data=dict(x=[], y=[]))
+source_roll9 = CDS(data=dict(x=[], y=[]))
+source_roll10 = CDS(data=dict(x=[], y=[]))
 source_pbe = CDS(data=dict(x=d_pbe["raw_bins"][:, 0], 
                            y=d_pbe["raw_bins"][:, 1]/2,
                            yh=d_pbe["raw_bins"][:, 1]))
@@ -193,11 +199,15 @@ plot_raw.line('x', 'y', source=source_roll4, line_width=4, line_alpha=0.6,
 plot_raw.line('x', 'y', source=source_roll5, line_width=4, line_alpha=0.6,
               line_color='red')
 plot_raw.line('x', 'y', source=source_roll6, line_width=4, line_alpha=0.6,
-              line_color='yellow')
-plot_raw.line('x', 'y', source=source_roll7, line_width=4, line_alpha=0.6,
               line_color='purple')
-plot_raw.line('x', 'y', source=source_roll8, line_width=4, line_alpha=0.6,
+plot_raw.line('x', 'y', source=source_roll7, line_width=4, line_alpha=0.6,
               line_color='olive')
+plot_raw.line('x', 'y', source=source_roll8, line_width=4, line_alpha=0.6,
+              line_color='yellow')
+plot_raw.line('x', 'y', source=source_roll9, line_width=4, line_alpha=0.6,
+              line_color='sienna')
+plot_raw.line('x', 'y', source=source_roll10, line_width=4, line_alpha=0.6,
+              line_color='grey')
 plot_pbe.rect('x', 'y', width = 1, height='yh', source=source_pbe,
               fill_color="blue")
 plot_pbe.line('x', 'y', source=source_pbe_mean, line_width=4, line_alpha=0.6,
@@ -290,6 +300,16 @@ def update_plot():
                                  y=arr_res["raw_bins"][7])
     else:
         source_roll8.data = dict(x=[], y=[]) 
+    if len(arr_res["raw_bins"])>8:         
+        source_roll9.data = dict(x=range(0,len(arr_res["raw_bins"][8])), 
+                                 y=arr_res["raw_bins"][8])
+    else:
+        source_roll9.data = dict(x=[], y=[]) 
+    if len(arr_res["raw_bins"])>9:         
+        source_roll10.data = dict(x=range(0,len(arr_res["raw_bins"][9])), 
+                                 y=arr_res["raw_bins"][9])
+    else:
+        source_roll10.data = dict(x=[], y=[])      
     # Back to clean(er) code again
     source_pbe.data = dict(x=pbe_res["raw_bins"][:, 0], 
                            y=pbe_res["raw_bins"][:, 1]/2,
@@ -325,6 +345,8 @@ def clear_plot():
     source_roll6.data = dict(x=[], y=[])
     source_roll7.data = dict(x=[], y=[])
     source_roll8.data = dict(x=[], y=[])
+    source_roll9.data = dict(x=[], y=[])
+    source_roll10.data = dict(x=[], y=[])
     source_pbe.data = dict(x=[], y=[], yh=[])
     source_pbe_mean.data = dict(x=[], y=[])
     # Return the ranges to normal
@@ -344,13 +366,81 @@ def clear_plot():
 plot_sim.on_click(update_plot)
 plot_clear.on_click(clear_plot)
 
+# Download the raw rolls data
+js_raw = CustomJS(args=dict(source=source_dt_raw), code="""
+            var data = source.get('data');
+            var filetext = 'mean,std,5 perc,95 perc\\n';
+            for (i=0; i < data['mvs'].length; i++) {
+                var currRow = [data['mvs'][i].toString(),
+                              data['stds'][i].toString(),
+                              data['p5'][i].toString(),
+                              data['p95'][i].toString().concat('\\n')];
+
+                var joined = currRow.join();
+                filetext = filetext.concat(joined);
+            }
+
+            var filename = 'raw_stats.csv';
+            var blob = new Blob([filetext], { type: 'text/csv;charset=utf-8;' });
+
+            //addresses IE
+            if (navigator.msSaveBlob) {
+                navigator.msSaveBlob(blob, filename);
+            }
+
+            else {
+                var link = document.createElement("a");
+                link = document.createElement('a')
+                link.href = URL.createObjectURL(blob);
+                link.download = filename
+                link.target = "_blank";
+                link.style.visibility = 'hidden';
+                link.dispatchEvent(new MouseEvent('click'))
+            }
+        """)
+but_raw = Button(label='Download Table', button_type='success', callback=js_raw)
+
+# Download the pbe data
+js_pbe = CustomJS(args=dict(source=source_dt_pbe), code="""
+            var data = source.get('data');
+            var filetext = 'mean,std,5 perc,95 perc\\n';
+            for (i=0; i < data['mvs'].length; i++) {
+                var currRow = [data['mvs'][i].toString(),
+                              data['stds'][i].toString(),
+                              data['p5'][i].toString(),
+                              data['p95'][i].toString().concat('\\n')];
+
+                var joined = currRow.join();
+                filetext = filetext.concat(joined);
+            }
+
+            var filename = 'pbe_stats.csv';
+            var blob = new Blob([filetext], { type: 'text/csv;charset=utf-8;' });
+
+            //addresses IE
+            if (navigator.msSaveBlob) {
+                navigator.msSaveBlob(blob, filename);
+            }
+
+            else {
+                var link = document.createElement("a");
+                link = document.createElement('a')
+                link.href = URL.createObjectURL(blob);
+                link.download = filename
+                link.target = "_blank";
+                link.style.visibility = 'hidden';
+                link.dispatchEvent(new MouseEvent('click'))
+            }
+        """)
+but_pbe = Button(label='Download Table', button_type='success', callback=js_pbe)
+
 ###-----------------------------------------------------------------------###
 ###----------------------------PAGE LAYOUT--------------------------------###
 ### This section defines the basic layout of the GUI.                     ###
 ###-----------------------------------------------------------------------###
 col_inputs = column(plot_ctls, up_ctls)
 col_plots = column(plot_console, plot_raw, plot_pbe)
-col_dts = column(dt_raw_title, dt_raw, dt_pbe_title, dt_pbe)
+col_dts = column(dt_raw_title, but_raw, dt_raw, dt_pbe_title, but_pbe, dt_pbe)
 row_page = row(col_inputs, col_plots, col_dts, width=1600)
 curdoc().add_root(row_page)
 curdoc().title = "Point Buy Equivalent Simulator (Powered by PyPBE)"
