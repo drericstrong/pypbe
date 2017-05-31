@@ -1,14 +1,15 @@
 ### PyPBE Bokeh Simulator
 ### Written By: Eric Strong
-### Last Updated: 2017/05/25
+### Last Updated: 2017/05/30
 
 from pypbe.core import PBE
 from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models.tools import SaveTool
 from bokeh.models.ranges import Range1d
-from bokeh.models import ColumnDataSource as CDS, CustomJS
+from bokeh.models.annotations import Label
 from bokeh.layouts import column, row, widgetbox
+from bokeh.models import ColumnDataSource as CDS, CustomJS
 from bokeh.models.widgets.tables import DataTable, TableColumn
 from bokeh.models.widgets import Slider, Div, Button, RadioButtonGroup
 
@@ -18,14 +19,14 @@ from bokeh.models.widgets import Slider, Div, Button, RadioButtonGroup
 ### may be modified without concern, if required.                         ###
 ###-----------------------------------------------------------------------###
 # Syntax is "default, range:[Lower, Upper, Step]"
-d_nd, r_nd = 3, [1, 10, 1] # Number of Dice
-d_dt, r_dt = 6, [2, 20, 1] # Dice Type
-d_kd, r_kd = 3, [1, 10, 1] # Dice to Keep
-d_av, r_av = 0, [-16, 16, 1] # Add Value
+d_nd, r_nd = 3, [1, 12, 1] # Number of Dice
+d_dt, r_dt = 6, [2, 12, 1] # Dice Sides
+d_kd, r_kd = 3, [1, 11, 1] # Dice to Keep
+d_av, r_av = 0, [-8, 16, 1] # Add Value
 d_na, r_na = 6, [1, 20, 1] # Number of Attributes
 d_ka, r_ka = 6, [1, 10, 1] # Attributes to Keep
-d_rr, r_rr = 0, [0, 20, 1] # Rerolls
-d_nar, r_nar = 1, [1, 20, 1] # Number of Arrays
+d_rr, r_rr = 0, [0, 11, 1] # Rerolls
+d_nar, r_nar = 1, [1, 10, 1] # Number of Arrays
 d_hi, r_hi = 4, [3, 5, 1] # Monte Carlo Histories
 d_s, d_ss = "PF", ["PF", "3e", "4e", "5e"] # Systems
 
@@ -48,7 +49,7 @@ plot_pbe = figure(plot_height=350, plot_width=600, logo=None,
                   x_axis_label='Point Buy Equivalent', 
                   tools="pan,box_zoom,wheel_zoom,hover")
 plot_pbe.add_tools(SaveTool(name="pbe_hist.jpg"))
-label_logo = Div(text='<a href="https://github.com/drericstrong/pypbe">PyPBE GitHub Repository</a>')
+label_logo = Div(text='<a href="https://github.com/drericstrong/pypbe">See Examples</a>')
 # Main Control Buttons
 plot_sim = Button(label="Simulate")
 plot_clear = Button(label="Clear")
@@ -56,13 +57,13 @@ plot_ctls = column(plot_sim, plot_clear, label_logo)
 # User-Configurable Parameters
 up_title = Div(text="System:")
 up_sys = RadioButtonGroup(labels=d_ss, active=0)
-up_nd = Slider(title="Number of Dice ('X' in 'XdY+Z')", value=d_nd, 
+up_nd = Slider(title="Number of Dice Per Attribute ('X' in 'XdY+Z')", value=d_nd, 
                start=r_nd[0], end=r_nd[1], step=r_nd[2])
-up_dt = Slider(title="Dice Type ('Y' in 'XdY+Z')", value=d_dt, 
+up_dt = Slider(title="Dice Sides ('Y' in 'XdY+Z')", value=d_dt, 
                start=r_dt[0], end=r_dt[1], step=r_dt[2])
-up_kd = Slider(title="Dice to Keep (roll 'XdY', keep best 'K' rolls)", value=d_kd, 
+up_kd = Slider(title="Dice to Keep Per Attribute (best 'KdY' of 'XdY')", value=d_kd, 
                start=r_kd[0], end=r_kd[1], step=r_kd[2])
-up_av = Slider(title="Add Value ('Z' in 'XdY+Z')", value=d_av, 
+up_av = Slider(title="Modifier +/- ('Z' in 'XdY+Z')", value=d_av, 
                start=r_av[0], end=r_av[1], step=r_av[2])
 up_na = Slider(title="Number of Attributes (STR, INT, WIS, etc.)", value=d_na, 
                start=r_na[0], end=r_na[1], step=r_na[2])
@@ -103,15 +104,20 @@ def sim(num_dice, dice_type, keep_dice, add_val, num_attr, keep_attr, reroll,
         num_arrays, num_hist, pbe_map):
     # Error Checking
     if keep_dice > num_dice:
-        plot_console.text = "ERROR: <br>Number of dice to keep cannot be greater " + \
-                            "than the number of dice."
+        plot_console.text = "ERROR: <br>Number of dice to keep cannot " + \
+            "be greater than the number of dice."
         raise ValueError()
     if keep_attr > num_attr:
-        plot_console.text = "ERROR: <br>Number of attributes to keep cannot be greater" + \
-                            " than the number of attributes."
+        plot_console.text = "ERROR: <br>Number of attributes to keep cannot " + \
+            "be greater than the number of attributes."
         raise ValueError()
     if reroll >= dice_type:
-        plot_console.text = "ERROR: <br>Number to re-roll must be less than dice type."
+        plot_console.text = "ERROR: <br>Any dice roll less than the 'Reroll' value (to " + \
+            "the left) will be rerolled, but you have specified a 'Reroll' " + \
+            "value greater than or equal to the number of sides on the dice, " + \
+            "meaning every dice will be rerolled forever. Please reduce the " + \
+            "'Reroll' value or increase the 'Dice Sides' value to resolve " + \
+            "this issue."
         raise ValueError()
     # If the lowest possible value is below the lowest defined point buy,
     # PyPBE can't calculate it. Same for the highest value being above the
@@ -122,18 +128,26 @@ def sim(num_dice, dice_type, keep_dice, add_val, num_attr, keep_attr, reroll,
     low_def_val = min(pbe_vect.keys())
     high_def_val = max(pbe_vect.keys())
     if low_pos_val < low_def_val:
-        plot_console.text = "ERROR: <br>The lowest possible value is " + \
-                             str(low_pos_val) + ". The PBE mapping is not defined for " + \
-                             "values less than " + str(low_def_val) + \
-                             ". To resolve this issue, please increase the number of dice (or " + \
-                             "dice to keep) or the add value." 
+        plot_console.text = "ERROR: <br>A typical Point Buy system is defined only for rolls " + \
+            "between 3 and 18. For example, in PF, buying an '18' attribute costs " + \
+            "17 in point buy, but you can't outright buy a '19' attribute (for most DMs). " + \
+            "According to your selections to the left, the lowest possible roll is " + \
+            str(low_pos_val) + " (dice to keep per attribute + modifier), which is less " + \
+            "than 3. To resolve this issue, please increase the number of dice to keep " + \
+            "per attribute or the modifier so that the lowest possible roll is at least " + \
+            "3. If you need to specify a custom Point Buy system which includes values " + \
+            "less than 3, please use the PyPBE Python module directly."
         raise ValueError()
     elif high_pos_val > high_def_val:
-        plot_console.text = "ERROR: <br>The highest possible value is " + \
-                             str(high_pos_val) + ". The PBE mapping is not defined for " + \
-                             "values greater than " + str(high_def_val) + \
-                             ". To resolve this issue, please decrease the number of dice (or " + \
-                             "dice to keep) or the add value."
+        plot_console.text = "ERROR: <br>A typical Point Buy system is defined only for rolls " + \
+            "between 3 and 18. For example, in PF, buying an '18' attribute costs " + \
+            "17 in point buy, but you can't outright buy a '19' attribute (for most DMs). " + \
+            "According to your selections to the left, the highest possible roll is " + \
+            str(high_pos_val) + " (dice to keep * dice sides + modifier), which is greater " + \
+            "than 18. To resolve this issue, please decrease the number of dice to keep " + \
+            "per attribute or the modifier so that the highest possible roll is no greater than " + \
+            "18. If you need to specify a custom Point Buy system which includes values " + \
+            "greater than 18, please use the PyPBE Python module directly."
         raise ValueError()
     # Run the simulation
     pbe = PBE(num_dice, dice_type, add_val, num_attr, num_arrays, reroll,
@@ -234,6 +248,10 @@ pbe_5 = [str(round(d_pbe["5percentile"],2))]
 pbe_95 = [str(round(d_pbe["95percentile"],2))]
 source_dt_raw.data = dict(mvs=raw_m, stds=raw_s, p5=raw_5, p95=raw_95)
 source_dt_pbe.data = dict(mvs=pbe_m, stds=pbe_s, p5=pbe_5, p95=pbe_95)
+# Labels
+label_fpb = Label(text="Fair Point Buy:3", x=70, y=280, 
+                  x_units='screen', y_units='screen')
+plot_pbe.add_layout(label_fpb)
 
 ###-----------------------------------------------------------------------###
 ###----------------------------CALLBACKS----------------------------------###
@@ -333,6 +351,8 @@ def update_plot():
     pbe_95 = [round(pbe_res["95percentile"],2)]
     source_dt_raw.data = dict(mvs=raw_m, stds=raw_s, p5=raw_5, p95=raw_95)
     source_dt_pbe.data = dict(mvs=pbe_m, stds=pbe_s, p5=pbe_5, p95=pbe_95)
+    # Update the labels
+    label_fpb.text = "Fair Point Buy:{}".format(int(round(pbe_m[0])))
 
 # Behavior when the "Clear" button is clicked
 def clear_plot():
