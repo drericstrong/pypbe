@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>3. Python API &mdash; PyPBE 0.15 documentation</title>
+  <title>5. Bokeh Server &mdash; PyPBE 0.15 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="PyPBE 0.15 documentation" href="index.html"/>
-        <link rel="next" title="4. Jupyter Notebook" href="notebook.html"/>
-        <link rel="prev" title="2. Getting Started" href="gettingstarted.html"/> 
+        <link rel="next" title="6. Graphical User Interface" href="gui.html"/>
+        <link rel="prev" title="4. Jupyter Notebook" href="notebook.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -93,14 +93,12 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">2. Getting Started</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Python API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#basic-examples">Basic Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#custom-parameters">Custom Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonapi.html">3. Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebook.html">4. Jupyter Notebook</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Bokeh Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#user-controls">User Controls</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="notebook.html">4. Jupyter Notebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bokehserver.html">5. Bokeh Server</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gui.html">6. Graphical User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 </ul>
@@ -147,13 +145,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>3. Python API</li>
+      <li>5. Bokeh Server</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/pythonapi.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/bokehserver.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -166,28 +164,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="python-api">
-<h1>3. Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="basic-examples">
-<h2>Basic Examples<a class="headerlink" href="#basic-examples" title="Permalink to this headline">¶</a></h2>
-<p>Import the PBE class into your program, initializing it using the number and type of dice to roll, then use the &#8220;roll_mc&#8221; method to investigate the distribution. The results can be visualized using the &#8220;plot_histogram&#8221; method, and a data row summary can be generated using the &#8220;get_results&#8221; method.</p>
-<p>For example, running a simulation for three 6-sided dice (3d6), rolled for 6 attributes, can be accomplished using the following code:</p>
-<p>&gt; from pypbe import PBE</p>
-<p>&gt; alg = PBE(3,6)</p>
-<p>&gt; alg.roll_mc()</p>
-<p>&gt; alg.plot_histogram()</p>
-<p>&gt; results = alg.get_results()</p>
-<p>The &#8220;plot_histogram&#8221; function will generate a plot that looks like this:</p>
-<img alt="https://github.com/drericstrong/pypbe/blob/master/images/4d6_example.png?raw=true" src="https://github.com/drericstrong/pypbe/blob/master/images/4d6_example.png?raw=true" />
-<p>The top part of the plot shows the distribution of each dice roll, ranked from lowest (Roll 1) to highest (usually Roll 6). Think about it this way- the mean value of 6 sets of 3d6, repeated many times, will tend towards 10.5 (each six-sided dice has a mean of 3.5, so 3.5 times 3 equals 10.5). However, if you order the 6 sets from lowest to highest, you&#8217;ll notice that the lowest roll tends to be lower than 10.5, and the highest roll tends to be higher than 10.5. The plot shows the expected value for each ranked roll, which can be interpreted as the &#8220;typical&#8221; stat array for this rolling method. In the figure above, the 5th and 95th percentiles are given in brackets. For instance, [5,11] means that 90% of the distribution is between 5 and 11.</p>
-<p>The distribution of the Point Buy value is shown in the bottom plot by mapping the results of each dice roll to a Point Buy value. The default mapping is: {3:-16, 4:-12, 5:-9, 6:-6, 7:-4, 8:-2, 9:-1, 10:0, 11:1, 12:2, 13:3, 14:5, 15:7, 16:10, 17:13, 18:17}. The mean, standard deviation, 5th, and 95th percentiles are shown on the figure. You can interpret the mean of the Point Buy distribution as the &#8220;Point Buy Equivalent&#8221;- the Point Buy value that is most fair to choose as the equivalent for the ability score rolling method.</p>
-<p>The <em>get_results()</em> and <em>plot_histogram()</em> methods can be chained with the <em>roll_mc()</em> method, like this:</p>
-<p>&gt; hist_plot = alg.roll_mc().plot_histogram()</p>
-<p>&gt; res = alg.roll_mc().get_results()</p>
-</div>
-<div class="section" id="custom-parameters">
-<h2>Custom Parameters<a class="headerlink" href="#custom-parameters" title="Permalink to this headline">¶</a></h2>
-<p>More complicated scenarios can be run by adjusting the following user-specified parameters:</p>
+  <div class="section" id="bokeh-server">
+<h1>5. Bokeh Server<a class="headerlink" href="#bokeh-server" title="Permalink to this headline">¶</a></h1>
+<p>A Bokeh server is currently running on Heroku:</p>
+<img alt="https://github.com/drericstrong/pypbe/blob/master/images/pypbe-bk_screenshot.png?raw=true" src="https://github.com/drericstrong/pypbe/blob/master/images/pypbe-bk_screenshot.png?raw=true" />
+<div class="section" id="user-controls">
+<h2>User Controls<a class="headerlink" href="#user-controls" title="Permalink to this headline">¶</a></h2>
+<p>The user may adjust the following controls in the Bokeh server:</p>
 <p><strong>System</strong> (<em>pbe_map</em> parameter): Each RPG system has its own point buy scheme, and buying an attribute value may cost different amounts in different systems. For example, in PF a &#8216;10&#8217; will cost &#8216;0&#8217; point buy, while in 3e a &#8216;10&#8217; will cost &#8216;2&#8217; point buy. Currently recognized values for this parameter include: &#8216;PF&#8217;, &#8216;3e&#8217;, &#8216;4e&#8217;, and &#8216;5e&#8217;. However, a custom point buy scheme can be specified using the <em>custom_pbe_map</em> mentioned below. <em>Default</em>: &#8216;PF&#8217;. <em>Example</em>: the rpg group is playing D&amp;D 3rd edition, so the value should be &#8216;3e&#8217;.</p>
 <p><strong>Number of Dice Per Attribute</strong> (<em>num_dice</em> parameter): Each time you roll for an attribute (such as STR), this parameter specifies the total number of dice that you will roll. When using &#8216;XdY+Z&#8217; notation, this value is &#8216;X&#8217;. <em>Example</em>: if you are rolling three six-sided dice to determine your stats, this value should be &#8216;3&#8217;.</p>
 <p><strong>Dice Sides</strong> (<em>dice_type</em> parameter): Each time you roll for an attribute (such as STR), this parameter specifies the number of sides on the dice that you will roll. When using &#8216;XdY+Z&#8217; notation, this value is &#8216;Y&#8217;. <em>Example</em>: if you are rolling three six-sided dice to determine your stats, this value should be &#8216;6&#8217;.</p>
@@ -198,12 +181,6 @@
 <p><strong>Rerolls</strong> (<em>reroll</em> parameter): Each time you roll a die, you may wish to reroll values that are too low. Any die result that is less than or equal to this parameter will be rerolled. If this value is &#8216;0&#8217; (the default), no die will be rerolled at all. Values greater than 1 are also inclusive of lower values (i.e. &#8216;3&#8217; actually means reroll 1s, 2s, and 3s). Increasing this value will also increase the average point buy equivalent, because the worst die rolls will be rerolled. <em>Default</em>: &#8216;0&#8217;. <em>Examples</em>: if are rolling three six-sided dice but rerolling any 1s that come up, this value should be &#8216;1&#8217;. If you are rerolling any 1s or 2s, this value should be &#8216;2&#8217;.</p>
 <p><strong>Number of Arrays</strong> (<em>num_arrays</em> parameter): Each time you generate a full array, it will contain a number of attributes equal to the &#8216;attributes to keep&#8217; parameter. For instance, an array with six &#8216;attributes to keep&#8217; might look like: [12, 10, 6, 11, 15, 17]. The &#8216;number of arrays&#8217; parameter allows you to roll multiple arrays at once, automatically selecting the one with the highest point buy equivalent. Unfortunately, personal preference cannot be taken into account. For instance, a player might prefer [12, 12, 10, 10, 10, 10] over [18, 8, 8, 8, 8, 8], even though the latter array actually has a higher point buy equivalent. <em>Default</em>: &#8216;1&#8217;. <em>Example:</em> If you are rolling three arrays and choosing the array with the highest point buy equivalent, this value should be &#8216;3&#8217;.</p>
 <p><strong>Monte Carlo Histories</strong> (<em>num_hist</em>): PyPBE uses Monte Carlo simulation. Behind the scenes, the code is generating thousands/millions of dice rolls and calculating summary statistics from the results. This parameter specifies the number of histories that should be used to determine the statistics for a given rolling method. In general, increasing the number of histories will increase the accuracy, but it will also increase the amount of time/resources that the code will need to complete the calculation. Most common applications of PyPBE will only require 10^5 histories, but more complicated examples may need up to 10^6 or 10^7 histories. Note that in the Python API, the number of Monte Carlo histories is specified when the &#8220;roll_mc&#8221; function is called, not when the PBE object is initialized.</p>
-<p><strong>Custom Point Buy Mapping</strong> (<em>custom_pbe_map</em> parameter): Currently, this feature is only available in the Python API. If a system other than PF, 3e, 4e, or 5e is being used, or the DM wishes that the point buy scheme went below 3 or above 18, a custom point buy mapping must be specified. This is done using a Python dictionary that looks something like: {3: -16, 4: -12, 5: -9, 6: -6, 7: -4, 8: -2, 9: -1, 10: 0, 11: 1, 12: 2, 13: 3, 14: 5, 15: 7, 16: 10, 17: 13, 18: 17}. The dictionary key is the attribute value, and the dictionary value is the cost for that attribute value. Note that there is no input validation on this parameter at all; please specify at least the possible rolls between 3-18.</p>
-</div>
-<div class="section" id="troubleshooting">
-<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
-<p>One of the most common problems when using PyPBE is to have a maximum possible value that is higher than the greatest defined point buy, or a minimum possible value that is smaller than the lowest defined point buy. A typical Point Buy system is defined only for rolls between 3 and 18. For example, in PF, buying an &#8216;18&#8217; attribute costs 17 in point buy, but you can&#8217;t outright buy a &#8216;19&#8217; attribute (according to most DMs), so it isn&#8217;t defined. Hence, all possible rolls using PyPBE must fall between 3 and 18, unless a custom point buy mapping is defined.</p>
-<p>Using the parameter names from the section above, the maximum possible value is: (&#8216;dice to keep per attribute&#8217; * &#8216;dice sides&#8217; + &#8216;modifier&#8217;). The minimum possible value is: (&#8216;dice to keep per attribute&#8217; + &#8216;modifier&#8217;). If the maximum possible value is too high, consider decreasing the &#8216;dice to keep per attribute&#8217;, the &#8216;dice sides&#8217;, or the &#8216;modifier&#8217;. If the minimum possible value is too low, consider increasing the &#8216;dice to keep per attribute&#8217; or the &#8216;modifier&#8217;. It may require a subtle balancing act to achieve parameters that meet both of these specifications.</p>
 </div>
 </div>
 
@@ -217,10 +194,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="notebook.html" class="btn btn-neutral float-right" title="4. Jupyter Notebook" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="gui.html" class="btn btn-neutral float-right" title="6. Graphical User Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="gettingstarted.html" class="btn btn-neutral" title="2. Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="notebook.html" class="btn btn-neutral" title="4. Jupyter Notebook" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

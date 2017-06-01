@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>PyePBE &mdash; PyPBE 0.13 documentation</title>
+  <title>PyePBE &mdash; PyPBE 0.15 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="PyPBE 0.13 documentation" href="#"/>
+    <link rel="top" title="PyPBE 0.15 documentation" href="#"/>
         <link rel="next" title="1. Introduction" href="introduction.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.13
+                0.15
               </div>
             
           
@@ -92,9 +92,10 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">2. Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gui.html">3. Graphical User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonapi.html">3. Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebook.html">4. Jupyter Notebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pythonapi.html">5. Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bokehserver.html">5. Bokeh Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gui.html">6. Graphical User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 </ul>
 
@@ -165,8 +166,9 @@
 <p><em>Sarah, John, and Kara sit down to play the first session of a new Pathfinder campaign with their GM, Lee. Sarah is excited about playing her favorite class, a Ranger. It doesn&#8217;t matter what stats she rolls- she&#8217;ll make it work. John is a bit of a min-maxer and wants to roll up a Wizard, so he&#8217;s keen on getting the highest intelligence possible. Kara wants to play a Monk, which requires decent stats in a few different attributes.</em></p>
 <p><em>Lee decides that he wants the players to randomly roll for their character&#8217;s stats. Sarah is excited about the chance for high stats. She&#8217;s feeling especially lucky today. John, however, is angry. What if he doesn&#8217;t roll any 18s for his intelligence? Kara is worried. She really wants to play a Monk, but she wants the character to be effective, and bad rolls could significantly reduce the fun she&#8217;ll have playing the character.</em></p>
 <p><em>What should Lee do?</em></p>
-<p>PyPBE is a resource for tabletop gaming which allows Gamemasters (GM) to fairly select which random rolling method is closest to an equivalent Point Buy value. Ideally, all players will determine their character&#8217;s stats exactly the same way. However, in some cases (as in the story above), players may ask for several different options for generating their character&#8217;s stats. PyPBE is designed to allow GMs to make this decision in a fair way.</p>
-<p>As you work with PyPBE, you might also become concerned about the high variance inherent with every one of these methods and decide that you don&#8217;t ever want random rolling in your game.</p>
+<p>PyPBE is a resource for tabletop gaming which allows Gamemasters (GM) to fairly select which random rolling method is closest to an equivalent Point Buy value. Ideally, all players will determine their character&#8217;s stats exactly the same way. However, in some cases (as in the story above), players may ask for several different options for generating their character&#8217;s stats. But not all random rolling methods are created equal. Some (4d6, drop lowest) clearly give higher average results than others (3d6). PyPBE is designed to allow GMs to make this decision in a fair way.</p>
+<p>The stats that PyPBE calculates aren&#8217;t the &#8220;raw&#8221; values of the roll (e.g. typically 3 through 18), they&#8217;re the &#8220;Point Buy Equivalent&#8221; of multiple rolls using that stat-rolling method. For instance, if you roll 3d6 six times, you might get 10, 12, 8, 13, 7, 9, which has a Point Buy Equivalent of -2 (0+2-2+3-4-1) using the Pathfinder point buy scheme. PyPBE uses Monte Carlo simulation to obtain its results. If you perform the above process thousands/millions of times, you will get a distribution. The mean of that distribution is the fair Point Buy you should select for that rolling method. 90% of the time, the random roll PBE will fall between the 5%/95% values, which gives you an idea of the potential spread of the results. The &#8220;Typical Array&#8221; gives the most likely stat array using that random rolling method.</p>
+<p>PyPBE is designed for Pathfinder, 3e, 3.5e, 4e, and 5e characters. However, the Python API allows the option to supply a custom Point Buy mapping, which means that it is applicable for any system in which the &#8220;Point Buy&#8221; concept applies. PyPBE also supports any number of attributes, although it was designed for the common 6-attribute system (strength, constitution, dexterity, intelligence, wisdom, charisma).</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
@@ -182,17 +184,24 @@
 <li class="toctree-l2"><a class="reference internal" href="gettingstarted.html#importing-pypbe">Importing PyPBE</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="gui.html">3. Graphical User Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebook.html">4. Jupyter Notebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pythonapi.html">5. Python API</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="pythonapi.html">3. Python API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pythonapi.html#basic-examples">Basic Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pythonapi.html#custom-parameters">Custom Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pythonapi.html#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="notebook.html">4. Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bokehserver.html">5. Bokeh Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bokehserver.html#user-controls">User Controls</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gui.html">6. Graphical User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-11">Version 0.11</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-12">Version 0.12</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-13">Version 0.13</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-14">Version 0.14</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-15">Version 0.15</a></li>
 </ul>
 </li>
 </ul>
@@ -249,7 +258,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.13',
+            VERSION:'0.15',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

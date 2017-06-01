@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pypbe package &mdash; PyPBE 0.13 documentation</title>
+  <title>pypbe package &mdash; PyPBE 0.15 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="PyPBE 0.13 documentation" href="../index.html"/> 
+    <link rel="top" title="PyPBE 0.15 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.13
+                0.15
               </div>
             
           
@@ -91,9 +91,10 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">2. Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../gui.html">3. Graphical User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pythonapi.html">3. Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebook.html">4. Jupyter Notebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pythonapi.html">5. Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bokehserver.html">5. Bokeh Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gui.html">6. Graphical User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
 </ul>
 
@@ -187,13 +188,13 @@ and drop the lowest&#8221;.</p>
 </table>
 <dl class="class">
 <dt id="pypbe.core.PBE">
-<em class="property">class </em><code class="descclassname">pypbe.core.</code><code class="descname">PBE</code><span class="sig-paren">(</span><em>num_dice</em>, <em>dice_type</em>, <em>add_val=0</em>, <em>num_ability=6</em>, <em>num_arrays=1</em>, <em>reroll=0</em>, <em>best_dice=None</em>, <em>best_ability=6</em>, <em>pbe_map='pf'</em>, <em>custom_pbe_map=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pypbe.core.</code><code class="descname">PBE</code><span class="sig-paren">(</span><em>num_dice</em>, <em>dice_type</em>, <em>add_val=0</em>, <em>num_attribute=6</em>, <em>num_arrays=1</em>, <em>reroll=0</em>, <em>keep_dice=None</em>, <em>keep_attribute=6</em>, <em>pbe_map='pf'</em>, <em>custom_pbe_map=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Initializes a Monte Carlo simulation to determine the equivalent
 Point Buy of an ability score rolling method.</p>
 <dl class="method">
 <dt id="pypbe.core.PBE.get_results">
-<code class="descname">get_results</code><span class="sig-paren">(</span><em>title_prefix=''</em>, <em>title_override=''</em>, <em>round_digits=2</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE.get_results" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_results</code><span class="sig-paren">(</span><em>title_prefix=''</em>, <em>title_override=''</em>, <em>rnd_dig=2</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE.get_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs a summary of the results as an array, which might be
 useful for writing the results of multiple algorithms to a table.
 NOTE- This method must be called AFTER &#8220;roll_mc&#8221;.</p>
@@ -202,9 +203,9 @@ NOTE- This method must be called AFTER &#8220;roll_mc&#8221;.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>title_prefix</strong> &#8211; If desired, prefix the title (such as &#8220;Alg 1&#8221;)</li>
+<li><strong>title_prefix</strong> &#8211; If desired, prefix the title (such as &#8220;Alg 1 &#8221;)</li>
 <li><strong>title_override</strong> &#8211; Override the title string entirely</li>
-<li><strong>round_digits</strong> &#8211; the number of digits to round to</li>
+<li><strong>rnd_dig</strong> &#8211; the number of digits to round to</li>
 </ul>
 </td>
 </tr>
@@ -218,18 +219,21 @@ NOTE- This method must be called AFTER &#8220;roll_mc&#8221;.</p>
 
 <dl class="method">
 <dt id="pypbe.core.PBE.plot_histogram">
-<code class="descname">plot_histogram</code><span class="sig-paren">(</span><em>title_prefix=''</em>, <em>title_override=''</em>, <em>figsize=(10</em>, <em>8)</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE.plot_histogram" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot_histogram</code><span class="sig-paren">(</span><em>title_prefix=''</em>, <em>title_override=''</em>, <em>figsize=(8</em>, <em>6)</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE.plot_histogram" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a histogram of the results after the Monte Carlo simulation is
 run. NOTE- This method must be called AFTER &#8220;roll_mc&#8221;.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>title_prefix</strong> &#8211; If desired, prefix the title (such as &#8220;Alg 1&#8221;)</li>
 <li><strong>title_override</strong> &#8211; Override the title string entirely</li>
 <li><strong>figsize</strong> &#8211; The size of the histogram plot</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a seaborn figure of the histogram</p>
 </td>
 </tr>
 </tbody>
@@ -238,7 +242,7 @@ run. NOTE- This method must be called AFTER &#8220;roll_mc&#8221;.</p>
 
 <dl class="method">
 <dt id="pypbe.core.PBE.roll_mc">
-<code class="descname">roll_mc</code><span class="sig-paren">(</span><em>num_hist=1000000</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE.roll_mc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">roll_mc</code><span class="sig-paren">(</span><em>num_hist=100000</em><span class="sig-paren">)</span><a class="headerlink" href="#pypbe.core.PBE.roll_mc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs the initialized Monte Carlo simulation to determine the equivalent
 Point Buy of an ability score rolling method. NOTE- This method must
 be called BEFORE &#8220;plot_histogram&#8221;.</p>
@@ -248,7 +252,7 @@ be called BEFORE &#8220;plot_histogram&#8221;.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num_hist</strong> &#8211; Number of Monte Carlo histories to run. Suggest 10**6</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num_hist</strong> &#8211; Number of Monte Carlo histories to run. Suggest 10**5</td>
 </tr>
 </tbody>
 </table>
@@ -427,7 +431,7 @@ uniformly distributed discrete non-integers.</dd>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.13',
+            VERSION:'0.15',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

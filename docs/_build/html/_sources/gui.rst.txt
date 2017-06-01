@@ -1,4 +1,6 @@
 =============================
- 3. Graphical User Interface
+ 6. Graphical User Interface
 =============================
-Under construction
+This feature has been moved to a separate repository. Please visit this link for more information:
+
+https://github.com/drericstrong/pypbe-sim

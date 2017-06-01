@@ -1,40 +1,15 @@
-==========================
- 3. Python API
-==========================
+=============================
+ 5. Bokeh Server
+=============================
+A Bokeh server is currently running on Heroku:
 
-Basic Examples
----------------
-Import the PBE class into your program, initializing it using the number and type of dice to roll, then use the "roll_mc" method to investigate the distribution. The results can be visualized using the "plot_histogram" method, and a data row summary can be generated using the "get_results" method. 
+.. _PyPBE Bokeh Server: https://pypbe.herokuapp.com/pypbe-bk
 
-For example, running a simulation for three 6-sided dice (3d6), rolled for 6 attributes, can be accomplished using the following code:
+.. image:: https://github.com/drericstrong/pypbe/blob/master/images/pypbe-bk_screenshot.png?raw=true
 
-> from pypbe import PBE
-
-> alg = PBE(3,6)
-
-> alg.roll_mc()
-
-> alg.plot_histogram()
-
-> results = alg.get_results()
-
-The "plot_histogram" function will generate a plot that looks like this:
-
-.. image:: https://github.com/drericstrong/pypbe/blob/master/images/4d6_example.png?raw=true
-
-The top part of the plot shows the distribution of each dice roll, ranked from lowest (Roll 1) to highest (usually Roll 6). Think about it this way- the mean value of 6 sets of 3d6, repeated many times, will tend towards 10.5 (each six-sided dice has a mean of 3.5, so 3.5 times 3 equals 10.5). However, if you order the 6 sets from lowest to highest, you'll notice that the lowest roll tends to be lower than 10.5, and the highest roll tends to be higher than 10.5. The plot shows the expected value for each ranked roll, which can be interpreted as the "typical" stat array for this rolling method. In the figure above, the 5th and 95th percentiles are given in brackets. For instance, [5,11] means that 90% of the distribution is between 5 and 11.
-
-The distribution of the Point Buy value is shown in the bottom plot by mapping the results of each dice roll to a Point Buy value. The default mapping is: {3:-16, 4:-12, 5:-9, 6:-6, 7:-4, 8:-2, 9:-1, 10:0, 11:1, 12:2, 13:3, 14:5, 15:7, 16:10, 17:13, 18:17}. The mean, standard deviation, 5th, and 95th percentiles are shown on the figure. You can interpret the mean of the Point Buy distribution as the "Point Buy Equivalent"- the Point Buy value that is most fair to choose as the equivalent for the ability score rolling method.
-
-The *get_results()* and *plot_histogram()* methods can be chained with the *roll_mc()* method, like this:
-
-> hist_plot = alg.roll_mc().plot_histogram()
-
-> res = alg.roll_mc().get_results()
-
-Custom Parameters
-------------------
-More complicated scenarios can be run by adjusting the following user-specified parameters:
+User Controls
+--------------
+The user may adjust the following controls in the Bokeh server:
 
 **System** (*pbe_map* parameter): Each RPG system has its own point buy scheme, and buying an attribute value may cost different amounts in different systems. For example, in PF a '10' will cost '0' point buy, while in 3e a '10' will cost '2' point buy. Currently recognized values for this parameter include: 'PF', '3e', '4e', and '5e'. However, a custom point buy scheme can be specified using the *custom_pbe_map* mentioned below. *Default*: 'PF'. *Example*: the rpg group is playing D&D 3rd edition, so the value should be '3e'.
 
@@ -55,11 +30,3 @@ More complicated scenarios can be run by adjusting the following user-specified 
 **Number of Arrays** (*num_arrays* parameter): Each time you generate a full array, it will contain a number of attributes equal to the 'attributes to keep' parameter. For instance, an array with six 'attributes to keep' might look like: [12, 10, 6, 11, 15, 17]. The 'number of arrays' parameter allows you to roll multiple arrays at once, automatically selecting the one with the highest point buy equivalent. Unfortunately, personal preference cannot be taken into account. For instance, a player might prefer [12, 12, 10, 10, 10, 10] over [18, 8, 8, 8, 8, 8], even though the latter array actually has a higher point buy equivalent. *Default*: '1'. *Example:* If you are rolling three arrays and choosing the array with the highest point buy equivalent, this value should be '3'. 
 
 **Monte Carlo Histories** (*num_hist*): PyPBE uses Monte Carlo simulation. Behind the scenes, the code is generating thousands/millions of dice rolls and calculating summary statistics from the results. This parameter specifies the number of histories that should be used to determine the statistics for a given rolling method. In general, increasing the number of histories will increase the accuracy, but it will also increase the amount of time/resources that the code will need to complete the calculation. Most common applications of PyPBE will only require 10^5 histories, but more complicated examples may need up to 10^6 or 10^7 histories. Note that in the Python API, the number of Monte Carlo histories is specified when the "roll_mc" function is called, not when the PBE object is initialized.
-
-**Custom Point Buy Mapping** (*custom_pbe_map* parameter): Currently, this feature is only available in the Python API. If a system other than PF, 3e, 4e, or 5e is being used, or the DM wishes that the point buy scheme went below 3 or above 18, a custom point buy mapping must be specified. This is done using a Python dictionary that looks something like: {3: -16, 4: -12, 5: -9, 6: -6, 7: -4, 8: -2, 9: -1, 10: 0, 11: 1, 12: 2, 13: 3, 14: 5, 15: 7, 16: 10, 17: 13, 18: 17}. The dictionary key is the attribute value, and the dictionary value is the cost for that attribute value. Note that there is no input validation on this parameter at all; please specify at least the possible rolls between 3-18. 
-
-Troubleshooting
-----------------
-One of the most common problems when using PyPBE is to have a maximum possible value that is higher than the greatest defined point buy, or a minimum possible value that is smaller than the lowest defined point buy. A typical Point Buy system is defined only for rolls between 3 and 18. For example, in PF, buying an '18' attribute costs 17 in point buy, but you can't outright buy a '19' attribute (according to most DMs), so it isn't defined. Hence, all possible rolls using PyPBE must fall between 3 and 18, unless a custom point buy mapping is defined.
-
-Using the parameter names from the section above, the maximum possible value is: ('dice to keep per attribute' * 'dice sides' + 'modifier'). The minimum possible value is: ('dice to keep per attribute' + 'modifier'). If the maximum possible value is too high, consider decreasing the 'dice to keep per attribute', the 'dice sides', or the 'modifier'. If the minimum possible value is too low, consider increasing the 'dice to keep per attribute' or the 'modifier'. It may require a subtle balancing act to achieve parameters that meet both of these specifications. 
