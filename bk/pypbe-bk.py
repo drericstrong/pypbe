@@ -128,26 +128,24 @@ def sim(num_dice, dice_type, keep_dice, add_val, num_attr, keep_attr, reroll,
     low_def_val = min(pbe_vect.keys())
     high_def_val = max(pbe_vect.keys())
     if low_pos_val < low_def_val:
-        plot_console.text = "ERROR (Low Value): <br>A typical Point Buy system is defined only for rolls " + \
-            "between 3 and 18. For example, in PF, buying an '18' attribute costs " + \
-            "17 in point buy, but you can't outright buy a '19' attribute (for most DMs). " + \
+        plot_console.text = "ERROR (Low Value): <br>A typical Point Buy system is based on " + \
+            "rolling 3d6 per attribute, and therefore is only defined for rolls " + \
+            "between 3 and 18. For example, you can buy an '18' attribute score, but " + \
+            "you can't outright buy a '19' attribute score (before racial modifiers). " + \
             "According to your selections to the left, the lowest possible roll is " + \
             str(low_pos_val) + " (dice to keep per attribute + modifier), which is less " + \
             "than 3. To resolve this issue, please increase the number of dice to keep " + \
-            "per attribute or the modifier so that the lowest possible roll is at least " + \
-            "3. If you need to specify a custom Point Buy system which includes values " + \
-            "less than 3, please use the PyPBE Python module directly."
+            "per attribute or the modifier so that the lowest possible roll is at least 3."
         raise ValueError()
     elif high_pos_val > high_def_val:
-        plot_console.text = "ERROR (High Value): <br>A typical Point Buy system is defined only for rolls " + \
-            "between 3 and 18. For example, in PF, buying an '18' attribute costs " + \
-            "17 in point buy, but you can't outright buy a '19' attribute (for most DMs). " + \
+        plot_console.text = "ERROR (High Value): <br>A typical Point Buy system is based on " + \
+            "rolling 3d6 per attribute, and therefore is only defined for rolls " + \
+            "between 3 and 18. For example, you can buy an '18' attribute score, but " + \
+            "you can't outright buy a '19' attribute score (before racial modifiers). " + \
             "According to your selections to the left, the highest possible roll is " + \
             str(high_pos_val) + " (dice to keep * dice sides + modifier), which is greater " + \
             "than 18. To resolve this issue, please decrease the number of dice to keep " + \
-            "per attribute or the modifier so that the highest possible roll is no greater than " + \
-            "18. If you need to specify a custom Point Buy system which includes values " + \
-            "greater than 18, please use the PyPBE Python module directly."
+            "per attribute or the modifier so that the highest possible roll is no greater than 18."
         raise ValueError()
     # Run the simulation
     pbe = PBE(num_dice, dice_type, add_val, num_attr, num_arrays, reroll,
