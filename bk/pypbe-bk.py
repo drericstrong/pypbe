@@ -49,7 +49,7 @@ plot_pbe = figure(plot_height=350, plot_width=600, logo=None,
                   x_axis_label='Point Buy Equivalent', 
                   tools="pan,box_zoom,wheel_zoom,hover")
 plot_pbe.add_tools(SaveTool(name="pbe_hist.jpg"))
-label_logo = Div(text='<a href="https://github.com/drericstrong/pypbe">See Examples</a>')
+label_logo = Div(text='<a href="https://github.com/drericstrong/pypbe#custom-parameters">Help</a>')
 # Main Control Buttons
 plot_sim = Button(label="Simulate")
 plot_clear = Button(label="Clear")
@@ -112,7 +112,7 @@ def sim(num_dice, dice_type, keep_dice, add_val, num_attr, keep_attr, reroll,
             "be greater than the number of attributes."
         raise ValueError()
     if reroll >= dice_type:
-        plot_console.text = "ERROR: <br>Any dice roll less than the 'Reroll' value (to " + \
+        plot_console.text = "ERROR (Reroll): <br>Any dice roll less than the 'Reroll' value (to " + \
             "the left) will be rerolled, but you have specified a 'Reroll' " + \
             "value greater than or equal to the number of sides on the dice, " + \
             "meaning every dice will be rerolled forever. Please reduce the " + \
@@ -128,7 +128,7 @@ def sim(num_dice, dice_type, keep_dice, add_val, num_attr, keep_attr, reroll,
     low_def_val = min(pbe_vect.keys())
     high_def_val = max(pbe_vect.keys())
     if low_pos_val < low_def_val:
-        plot_console.text = "ERROR: <br>A typical Point Buy system is defined only for rolls " + \
+        plot_console.text = "ERROR (Low Value): <br>A typical Point Buy system is defined only for rolls " + \
             "between 3 and 18. For example, in PF, buying an '18' attribute costs " + \
             "17 in point buy, but you can't outright buy a '19' attribute (for most DMs). " + \
             "According to your selections to the left, the lowest possible roll is " + \
@@ -139,7 +139,7 @@ def sim(num_dice, dice_type, keep_dice, add_val, num_attr, keep_attr, reroll,
             "less than 3, please use the PyPBE Python module directly."
         raise ValueError()
     elif high_pos_val > high_def_val:
-        plot_console.text = "ERROR: <br>A typical Point Buy system is defined only for rolls " + \
+        plot_console.text = "ERROR (High Value): <br>A typical Point Buy system is defined only for rolls " + \
             "between 3 and 18. For example, in PF, buying an '18' attribute costs " + \
             "17 in point buy, but you can't outright buy a '19' attribute (for most DMs). " + \
             "According to your selections to the left, the highest possible roll is " + \
