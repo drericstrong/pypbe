@@ -3,30 +3,10 @@
 =============================
 A Bokeh server is currently running on Heroku:
 
-.. _PyPBE Bokeh Server: https://pypbe.herokuapp.com/pypbe-bk
+.. PyPBE Bokeh Server:: https://pypbe.herokuapp.com/pypbe-bk
 
 .. image:: https://github.com/drericstrong/pypbe/blob/master/images/pypbe-bk_screenshot.png?raw=true
 
 User Controls
 --------------
-The user may adjust the following controls in the Bokeh server:
-
-**System** (*pbe_map* parameter): Each RPG system has its own point buy scheme, and buying an attribute value may cost different amounts in different systems. For example, in PF a '10' will cost '0' point buy, while in 3e a '10' will cost '2' point buy. Currently recognized values for this parameter include: 'PF', '3e', '4e', and '5e'. However, a custom point buy scheme can be specified using the *custom_pbe_map* mentioned below. *Default*: 'PF'. *Example*: the rpg group is playing D&D 3rd edition, so the value should be '3e'.
-
-**Number of Dice Per Attribute** (*num_dice* parameter): Each time you roll for an attribute (such as STR), this parameter specifies the total number of dice that you will roll. When using 'XdY+Z' notation, this value is 'X'. *Example*: if you are rolling three six-sided dice to determine your stats, this value should be '3'.
-
-**Dice Sides** (*dice_type* parameter): Each time you roll for an attribute (such as STR), this parameter specifies the number of sides on the dice that you will roll. When using 'XdY+Z' notation, this value is 'Y'. *Example*: if you are rolling three six-sided dice to determine your stats, this value should be '6'.
-
-**Modifier** (*add_val* parameter): Each time you roll for an attribute (such as STR), this parameter specifies the amount that you should add to the total dice roll. When using 'XdY+Z' notation, this value is 'Z'. *Default*: '0'. *Example*: if you are rolling three four-sided dice and adding six to determine your stats, this value should be '6'. 
-
-**Dice to Keep Per Attribute** (*keep_dice* parameter): This value allows you to roll more dice than you need, keeping only the best ones. Keeping less dice than the total rolled dice will increase the average point buy equivalent, since the worst die rolls will be discarded. When using 'XdY+Z' notation, this value affects the number of 'X' that will actually be kept at the end. Note that it's impossible for the number of dice to keep to be greater than the number of dice that were actually rolled. *Default*: if using the Python API and the *keep_dice* is not specified, the default is to use the same as the 'number of dice per attribute'. If using the Bokeh server, the default is '3'. *Example*: if you are rolling four six-sided dice and keeping the best three dice, the 'number of dice per attribute' should be '4' and the 'dice to keep per attribute' should be '3'.
-
-**Number of Attributes** (*num_attribute* parameter): This value allows you to adjust the number of character attributes which will be rolled. Most commonly, the number of attributes will be 6 (STR, DEX, CON, INT, WIS, CHA); however, some DMs may wish the characters to have additional attributes, such as 'comeliness'. Furthermore, an rpg system may actually require more than 6 attributes to be rolled at character creation. *Default*: '6'. *Example*: The DM wishes the characters to have seven attributes (STR, DEX, CON, INT, WIS, CHA, COM), so the 'number of attributes' should be '7', and the 'attributes to keep' should be '7' as well.
-
-**Attributes to Keep** (*keep_attribute* parameter): This value allows you to roll more attributes than you need, keeping only the best ones. Keeping less attributes than the total generated attributes will increase the average point buy equivalent, since the worst attributes will be discarded. Note that it's impossible for the number of attributes to keep to be greater than the number of attributes that were actually rolled. *Default*: '6'. *Example*: if you are rolling ten attributes but only keeping the best six attributes, the 'number of attributes' should be '10', and the 'attributes to keep' should be '6'.
-
-**Rerolls** (*reroll* parameter): Each time you roll a die, you may wish to reroll values that are too low. Any die result that is less than or equal to this parameter will be rerolled. If this value is '0' (the default), no die will be rerolled at all. Values greater than 1 are also inclusive of lower values (i.e. '3' actually means reroll 1s, 2s, and 3s). Increasing this value will also increase the average point buy equivalent, because the worst die rolls will be rerolled. *Default*: '0'. *Examples*: if are rolling three six-sided dice but rerolling any 1s that come up, this value should be '1'. If you are rerolling any 1s or 2s, this value should be '2'.
-
-**Number of Arrays** (*num_arrays* parameter): Each time you generate a full array, it will contain a number of attributes equal to the 'attributes to keep' parameter. For instance, an array with six 'attributes to keep' might look like: [12, 10, 6, 11, 15, 17]. The 'number of arrays' parameter allows you to roll multiple arrays at once, automatically selecting the one with the highest point buy equivalent. Unfortunately, personal preference cannot be taken into account. For instance, a player might prefer [12, 12, 10, 10, 10, 10] over [18, 8, 8, 8, 8, 8], even though the latter array actually has a higher point buy equivalent. *Default*: '1'. *Example:* If you are rolling three arrays and choosing the array with the highest point buy equivalent, this value should be '3'. 
-
-**Monte Carlo Histories** (*num_hist*): PyPBE uses Monte Carlo simulation. Behind the scenes, the code is generating thousands/millions of dice rolls and calculating summary statistics from the results. This parameter specifies the number of histories that should be used to determine the statistics for a given rolling method. In general, increasing the number of histories will increase the accuracy, but it will also increase the amount of time/resources that the code will need to complete the calculation. Most common applications of PyPBE will only require 10^5 histories, but more complicated examples may need up to 10^6 or 10^7 histories. Note that in the Python API, the number of Monte Carlo histories is specified when the "roll_mc" function is called, not when the PBE object is initialized.
+For more information about the user controls, please refer to the "Custom Parameters" heading in the Python API section.
