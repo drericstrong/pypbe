@@ -5,7 +5,9 @@
 [![PyPI version](https://badge.fury.io/py/pypbe.svg)](https://badge.fury.io/py/pypbe)
 [![Documentation Status](https://readthedocs.org/projects/pypbe/badge/?version=latest)](http://pypbe.readthedocs.io/en/latest/?badge=latest)
 
-## Python Point Buy Equivalence Calculator
+PyPBE is a resource for tabletop gaming which allows Gamemasters (GM) to fairly select which random rolling method is closest to an equivalent Point Buy value. Ideally, all players will determine their character's stats exactly the same way. However, in some cases, players may ask for several different options for generating their character's stats. PyPBE is designed to allow GMs to make this decision in a fair way. By calculating the equivalent Point Buy for a random rolling method, the GM can determine the expected power level of the characters, as well.
+
+## Why Would I Use It?
 
 *Sarah, John, and Kara sit down to play the first session of a new Pathfinder campaign with their GM, Lee. Sarah is excited about playing her favorite class, a Ranger. It doesn't matter what stats she rolls- she'll make it work. John is a bit of a min-maxer and wants to roll up a Wizard, so he's keen on getting the highest intelligence possible. Kara wants to play a Monk, which requires decent stats in a few different attributes.* 
 
@@ -13,11 +15,6 @@
 
 *What should Lee do?*
 
-PyPBE is a resource for tabletop gaming which allows Gamemasters (GM) to fairly select which random rolling method is closest to an equivalent Point Buy value. Ideally, all players will determine their character's stats exactly the same way. However, in some cases (as in the story above), players may ask for several different options for generating their character's stats. PyPBE is designed to allow GMs to make this decision in a fair way.
-
-As you work with PyPBE, you might also become concerned about the high variance inherent with every one of these methods and decide that you don't ever want random rolling in your game.
-
-### Overview
 Some GMs prefer to let their players choose between rolling for their ability scores and letting them use the Point Buy system. However, not all random rolling methods are created equal. Some (4d6, drop lowest) clearly give higher average results than others (3d6). PyPBE is designed to calculate and visualize the distribution of a specified ability score rolling method, which may provide useful information for decision-making.
 
 The stats that PyPBE calculates aren't the "raw" values of the roll (e.g. typically 3 through 18), they're the "Point Buy Equivalent" of multiple rolls using that rolling method. For instance, if you roll 3d6 six times, you might get 10, 12, 8, 13, 7, 9, which has a Point Buy Equivalent of -2 (0+2-2+3-4-1) using the Pathfinder point buy scheme. 
@@ -152,6 +149,3 @@ This feature is recommended for advanced users who are proficient in Python and 
 Most point buy systems cap out at 18 and bottom out at 3, since they are based on rolling 3d6. For example, you can buy an '18' attribute score, but you can't outright buy a '19' attribute score (before racial modifiers). Hence, all possible rolls using PyPBE must fall between 3 and 18, unless a custom point buy mapping is defined. One of the most common problems when using PyPBE is to have a maximum possible value that is higher than the greatest defined point buy, or a minimum possible value that is smaller than the lowest defined point buy. 
 
 Using the parameter names from the section above, the maximum possible value is: ('dice to keep per attribute' * 'dice sides' + 'modifier'). The minimum possible value is: ('dice to keep per attribute' + 'modifier'). If the maximum possible value is too high, consider decreasing the 'dice to keep per attribute', the 'dice sides', or the 'modifier'. If the minimum possible value is too low, consider increasing the 'dice to keep per attribute' or the 'modifier'. It may require a subtle balancing act to achieve parameters that meet both specifications. 
-
-## Supporting Further Development
-If you're interested in helping to offset my Heroku app hosting costs and supporting further development of PyPBE, please take a look at my [Patreon](https://www.patreon.com/user?u=6382715). I appreciate it!
