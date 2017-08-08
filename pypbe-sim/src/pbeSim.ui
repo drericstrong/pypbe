@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1222</width>
+    <height>701</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>PyPBE Simulator</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>10</y>
+      <width>291</width>
+      <height>571</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <item row="5" column="1">
+      <widget class="QSpinBox" name="spinKeepDice">
+       <property name="toolTip">
+        <string>Keep the best X dice (e.g. roll &quot;4d6&quot;, keep &quot;3&quot;)</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>10</number>
+       </property>
+       <property name="value">
+        <number>3</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="spinNumDice">
+       <property name="toolTip">
+        <string>Total number of dice to roll (e.g. &quot;3&quot; in &quot;3d6&quot;)</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>10</number>
+       </property>
+       <property name="value">
+        <number>3</number>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="toolTip">
+        <string>Add a constant value to the roll (e.g. &quot;2&quot; in &quot;4d4+2&quot;)</string>
+       </property>
+       <property name="text">
+        <string>Add Value</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QSpinBox" name="spinKeepAttrs">
+       <property name="toolTip">
+        <string>Keep the best X attributes (e.g. &quot;6&quot; in &quot;roll 4d4+2 7 times, keep the best 6&quot;)</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>6</number>
+       </property>
+       <property name="value">
+        <number>6</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboSystem">
+       <property name="toolTip">
+        <string>Choose the rpg system for the point buy mapping</string>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <property name="currentText">
+        <string/>
+       </property>
+       <property name="maxVisibleItems">
+        <number>4</number>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="toolTip">
+        <string>Number of dice arrays to choose from (e.g. &quot;3&quot; in &quot;roll 3d6 for 6 attributes, for 3 arrays&quot;)</string>
+       </property>
+       <property name="text">
+        <string>Number of Arrays</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="toolTip">
+        <string>Keep the best X dice (e.g. roll &quot;4d6&quot;, keep &quot;3&quot;)</string>
+       </property>
+       <property name="text">
+        <string>Keep Dice</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="1">
+      <widget class="QSpinBox" name="spinReroll">
+       <property name="toolTip">
+        <string>Cumulatively reroll these dice values (e.g. 0 reroll nothing, 1 reroll 1s, 2 reroll 1s and 2s, etc.)</string>
+       </property>
+       <property name="maximum">
+        <number>20</number>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="1">
+      <widget class="QSpinBox" name="spinNumArrays">
+       <property name="toolTip">
+        <string>Number of dice arrays to choose from (e.g. &quot;3&quot; in &quot;roll 3d6 for 6 attributes, for 3 arrays&quot;)</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>20</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="toolTip">
+        <string>Number of sides on the dice (e.g. &quot;6&quot; in &quot;3d6&quot;)</string>
+       </property>
+       <property name="text">
+        <string>Dice Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="spinDiceType">
+       <property name="toolTip">
+        <string>Number of sides on the dice (e.g. &quot;6&quot; in &quot;3d6&quot;)</string>
+       </property>
+       <property name="minimum">
+        <number>2</number>
+       </property>
+       <property name="maximum">
+        <number>20</number>
+       </property>
+       <property name="value">
+        <number>6</number>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QSpinBox" name="spinAddValue">
+       <property name="toolTip">
+        <string>Add a constant value to the roll (e.g. &quot;2&quot; in &quot;4d4+2&quot;)</string>
+       </property>
+       <property name="minimum">
+        <number>-20</number>
+       </property>
+       <property name="maximum">
+        <number>20</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label">
+       <property name="toolTip">
+        <string>Total number of dice to roll (e.g. &quot;3&quot; in &quot;3d6&quot;)</string>
+       </property>
+       <property name="text">
+        <string>Number of Dice</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QCheckBox" name="checkKeepDice">
+       <property name="toolTip">
+        <string>Must be checked if you want to keep less dice than you rolled</string>
+       </property>
+       <property name="text">
+        <string>Use Less Dice Than Rolled</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="toolTip">
+        <string>Choose the rpg system for the point buy mapping</string>
+       </property>
+       <property name="text">
+        <string>System</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QCheckBox" name="checkKeepAttr">
+       <property name="toolTip">
+        <string>Must be checked if you want to keep less attributes than you rolled</string>
+       </property>
+       <property name="text">
+        <string>Use Less Attributes Than Rolled</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="toolTip">
+        <string>Cumulatively reroll these dice values (e.g. 0 reroll nothing, 1 reroll 1s, 2 reroll 1s and 2s, etc.)</string>
+       </property>
+       <property name="text">
+        <string>Reroll</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="toolTip">
+        <string>Keep the best X attributes (e.g. &quot;6&quot; in &quot;roll 4d4+2 7 times, keep the best 6&quot;)</string>
+       </property>
+       <property name="text">
+        <string>Keep Attributes</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="toolTip">
+        <string>The total number of attributes to roll (e.g. STR, CON, DEX, INT, WIS, CHA)</string>
+       </property>
+       <property name="text">
+        <string>Number of Attributes</string>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="1">
+      <widget class="QPushButton" name="pushSim">
+       <property name="text">
+        <string>Simulate</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QSpinBox" name="spinNumAttr">
+       <property name="toolTip">
+        <string>The total number of attributes to roll (e.g. STR, CON, DEX, INT, WIS, CHA)</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>6</number>
+       </property>
+       <property name="value">
+        <number>6</number>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="toolTip">
+        <string>Monte Carlo histories to run (more is better, but slower)</string>
+       </property>
+       <property name="text">
+        <string>Number of Histories</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="1">
+      <widget class="QSpinBox" name="spinBox">
+       <property name="toolTip">
+        <string>Monte Carlo histories to run (more is better, but slower)</string>
+       </property>
+       <property name="minimum">
+        <number>100</number>
+       </property>
+       <property name="maximum">
+        <number>10000000</number>
+       </property>
+       <property name="value">
+        <number>100000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="0">
+      <widget class="QPushButton" name="pushAbout">
+       <property name="text">
+        <string>About</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>10</y>
+      <width>901</width>
+      <height>651</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="plotLayout"/>
+   </widget>
+   <widget class="QLineEdit" name="lineResults">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>670</y>
+      <width>811</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

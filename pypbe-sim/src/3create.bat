@@ -1,0 +1,1 @@
+pyinstaller pbeSimRun.py --onefile

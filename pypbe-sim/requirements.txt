@@ -1,0 +1,7 @@
+numpy
+seaborn
+matplotlib
+pypbe
+pyinstaller
+pyqt5
+pillow
