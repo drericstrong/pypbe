@@ -1,16 +1,11 @@
-# PyPBE Simulator
-
-![PyePBE](https://github.com/drericstrong/pypbe/blob/master/images/pypbe_small.jpg)
-
-### Core Library
-
-The core code repository of PyPBE is located [here](https://github.com/drericstrong/pypbe). Current documentation can be found [here](https://pypbe.readthedocs.io/en/latest/).
-
-### Build Version
+=============================
+ 7. PyPBE Simulator
+=============================
+**This executable was developed using an older version of PyPBE and may not work correctly at the current time.**
 
 The torrent file for a compiled, Windows executable can be found in the base directory of this repository:
 
-https://github.com/drericstrong/pypbe-sim/blob/master/pbeSimRun.torrent
+https://github.com/drericstrong/pypbe/blob/master/pypbe-sim/pbeSimRun.torrent
 
 **Warning**- if you're the type of person to download and run an executable from an unknown, random website, you need to take a long, hard look at your life and the various (bad) choices that have led you to this point. I cannot emphasize strongly enough that you should **not** directly download the executable from the above link. Instead, take a look at the following instructions for compiling it from source. If you can't get them to work, try searching for the answers yourself. Python is a very enjoyable language, and it may be good for your personal development to learn. In fact, you might find it fun.  
 
@@ -18,7 +13,8 @@ The maintainer apologizes that only a Windows executable is available in this se
 
 http://www.pyinstaller.org/
 
-### Compiling from Source
+Compiling from Source
+-----------------------
 
 Unfortunately, this section does assume some knowledge of Python and programming in general. Also, I (obviously) do not personally support any of the software required for these steps, and so any major changes in the modules/libraries in this section may invalidate these instructions. These instructions were last updated May 2017.
 

@@ -21,7 +21,7 @@ The stats that PyPBE calculates aren't the "raw" values of the roll (e.g. typica
 
 PyPBE uses Monte Carlo simulation to obtain its results. If you perform the above process thousands/millions of times, you will get a distribution. The mean of that distribution is the fair Point Buy you should select for that rolling method, and 90% of the time, the random roll PBE will fall between the 5%/95% values. The "Typical Array" gives the most likely stat array using that random rolling method.
 
-### Systems
+## Systems
 PyPBE is designed for Pathfinder, 3e, 3.5e, 4e, and 5e characters. However, it allows the option to supply a custom Point Buy mapping, which means that it is applicable for any system in which the "Point Buy" concept applies. PyPBE also supports any number of attributes, although it was designed for the common 6-attribute system (strength, constitution, dexterity, intelligence, wisdom, charisma). As the number of attributes increase, note that the plots may become cluttered.
 
 ## Try It Out!
@@ -133,7 +133,7 @@ The term 'array' refers to the total number of attributes which were generated u
 
 **Example**: If you are rolling three arrays and choosing the array with the highest point buy equivalent, this value should be '3'. 
 
-### -Monte Carlo Histories (*num_hist*)
+### -Monte Carlo Histories (*num_hist* parameter)
 PyPBE uses Monte Carlo simulation. Behind the scenes, the code is generating thousands (or millions, or more!) of dice rolls and calculating summary statistics from the results. Each of these summaries is called a 'history'. This parameter specifies the number of histories that should be used to determine the statistics for a given rolling method. In general, increasing the number of histories will increase the accuracy, but it will also increase the amount of time and resources that the code will need to complete the calculation. Most common applications of PyPBE will only require 10^5 histories, but more complicated examples may need up to 10^6 or 10^7 histories. Note that in the Python API, the number of Monte Carlo histories is specified when the "roll_mc" function is called, not when the PBE object is initialized.
 
 **Default**: '10^5'
@@ -145,7 +145,57 @@ This feature is recommended for advanced users who are proficient in Python and 
 
 **Example**: If you're extending the dictionary beyond 3 or 18, your new dictionary might look like: {2: -20, 3: -16, 4: -12, 5: -9, 6: -6, 7: -4, 8: -2, 9: -1, 10: 0, 11: 1, 12: 2, 13: 3, 14: 5, 15: 7, 16: 10, 17: 13, 18: 17, 19: 21}.
 
+### -Ability Score Lower Limit (*roll_low_limit* parameter)
+To ensure that characters are not too weak, you may want to set a lower limit on the possible dice rolls for an ability score. This limit is evaluated **after** the dice rolls have been summed together to get an ability score. The parameter is inclusive: any value **equal to** or **greater** than the ability score lower limit will be kept.
+
+**Default**: None
+
+**Example**: The ability score lower limit is 6. You roll 3d6 and get 1, 2, 2. Summing the rolls together, the ability score is 5, which is less than the ability score lower limit, so this ability score is discarded.
+
+**Important Note**: This option will **discard** ability scores that do not meet the criteria rather than **reroll** them. Hence, the number of Monte Carlo histories will be decreased from the originally-specified amount. The number of histories should be increased to compensate for this effect.
+
+### -Ability Score Higher Limit (*roll_high_limit* parameter)
+To ensure that characters are not too powerful, you may want to set a higher limit on the possible dice rolls for an ability score. This limit is evaluated **after** the dice rolls have been summed together to get an ability score. The parameter is inclusive: any value **less than** or **equal to** the ability score higher limit will be kept.
+
+**Default**: None
+
+**Example**: The ability score higher limit is 16. You roll 3d6 and get 6, 6, 5. Summing the rolls together, the ability score is 17, which is greater than the ability score higher limit, so this ability score is discarded.
+
+**Important Note**: This option will **discard** ability scores that do not meet the criteria rather than **reroll** them. Hence, the number of Monte Carlo histories will be decreased from the originally-specified amount. The number of histories should be increased to compensate for this effect.
+
+### -PBE Lower Limit (*pbe_low_limit* parameter)
+To ensure that characters are not too weak, you may want to set a lower limit on the possible point buy equivalent. The parameter is inclusive: any value **equal to** or **greater** than the PBE lower limit will be kept. 
+
+In the PyPBE simulator (pypbe-bk), there was no easy way to specify that a lower limit should not be used at all, so the value -21 indicates that there is no lower limit. 
+
+**Default**: None
+
+**Example**: The pbe lower limit is 5. You roll a stat array of [10, 7, 8, 9, 15, 9], which has a point buy equivalent of 0 (i.e. 0-4-2-1+8-1). This point buy equivalent is less than the PBE lower limit, so the array is discarded.
+
+**Important Note**: This option will **discard** ability scores that do not meet the criteria rather than **reroll** them. Hence, the number of Monte Carlo histories will be decreased from the originally-specified amount. The number of histories should be increased to compensate for this effect.
+
+### -PBE Higher Limit (*pbe_high_limit* parameter)
+To ensure that characters are not too powerful, you may want to set a higher limit on the possible point buy equivalent. The parameter is inclusive: any value **less than** or **equal to** the PBE higher limit will be kept.
+
+In the PyPBE simulator (pypbe-bk), there was no easy way to specify that a higher limit should not be used at all, so the value 61 indicates that there is no higher limit. 
+
+**Default**: None
+
+**Example**: The PBE higher limit is 25. You roll a stat array of [15, 18, 12, 10, 10, 15], which has a point buy equivalent of 33 (i.e. 7+17+2+0+0+7). This point buy equivalent is greater than the PBE higher limit, so the array is discarded.
+
+**Important Note**: This option will **discard** ability scores that do not meet the criteria rather than **reroll** them. Hence, the number of Monte Carlo histories will be decreased from the originally-specified amount. The number of histories should be increased to compensate for this effect.
+
 ## Troubleshooting
 Most point buy systems cap out at 18 and bottom out at 3, since they are based on rolling 3d6. For example, you can buy an '18' attribute score, but you can't outright buy a '19' attribute score (before racial modifiers). Hence, all possible rolls using PyPBE must fall between 3 and 18, unless a custom point buy mapping is defined. One of the most common problems when using PyPBE is to have a maximum possible value that is higher than the greatest defined point buy, or a minimum possible value that is smaller than the lowest defined point buy. 
 
 Using the parameter names from the section above, the maximum possible value is: ('dice to keep per attribute' * 'dice sides' + 'modifier'). The minimum possible value is: ('dice to keep per attribute' + 'modifier'). If the maximum possible value is too high, consider decreasing the 'dice to keep per attribute', the 'dice sides', or the 'modifier'. If the minimum possible value is too low, consider increasing the 'dice to keep per attribute' or the 'modifier'. It may require a subtle balancing act to achieve parameters that meet both specifications. 
+
+## Package Organization
+For those who wish to contribute or dig deeper into the code, the following folders in the GitHub repository may be of interest:
+
+* pypbe: contains the core functionality of PyPBE
+* pypbe-bk: a Bokeh server for visualizing the results from running PyPBE, with a Procfile for running on Heroku
+* pypbe-nb: an (older) Jupyter notebook with a basic GUI that shows off some of the functionality of PyPBE
+* pypbe-rec: a Bokeh server for recommending a dice rolling method based on a selected point buy (think of this as the inverse of pypbe-bk)
+* pypbe-sim: an (older) Windows executable for running PyPBE locally without Python
+* tests: a set of unit tests for the core functionality (needs some work)

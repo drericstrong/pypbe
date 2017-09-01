@@ -24,7 +24,9 @@ class PBE:
     """
     def __init__(self, num_dice, dice_type, add_val=0, num_attribute=6,
                  num_arrays=1, reroll=0, keep_dice=None, keep_attribute=6,
-                 pbe_map='pf', custom_pbe_map=None):
+                 pbe_map='pf', custom_pbe_map=None, roll_low_limit=None,
+                 roll_high_limit=None, pbe_low_limit=None,
+                 pbe_high_limit=None):
         """
         Initializes a Monte Carlo simulation to determine the equivalent
         Point Buy of an ability score rolling method.
@@ -51,7 +53,12 @@ class PBE:
             "cost" in the Point Buy system. You supply a string here, and
             the default is Pathfinder. You can (currently) select Pathfinder:
             'pf', D&D 3e: '3e', D&D 4e: '4e', or D&D 5e: '5e'
-        :param custom_pbe_map: If you want, you can supply a custom Point Buy
+        :param custom_pbe_map: Supply a custom Point Buy mapping
+        :param roll_low_limit: lowest allowable roll for an attribute
+            (lower rolls will be discarded)
+        :param roll_high_limit: highest allowable roll for an attribute
+        :param pbe_low_limit: lowest allowable equivalent Point Buy
+        :param pbe_high_limit: highest allowable equivalent Point Buy
         """
         # Save the user-supplied properties
         self.num_dice = int(num_dice)
@@ -61,6 +68,10 @@ class PBE:
         self.num_arrays = int(num_arrays)
         self.reroll = int(reroll)
         self.keep_attribute = int(keep_attribute)
+        self.roll_low_limit = roll_low_limit
+        self.roll_high_limit = roll_high_limit
+        self.pbe_low_limit = pbe_low_limit
+        self.pbe_high_limit = pbe_high_limit
         # If a custom PBE map is supplied, use it; otherwise, find the
         # PBE mapping based on the user-supplied string
         pbe_map = str(pbe_map).lower()
@@ -115,6 +126,19 @@ class PBE:
                              "values greater than " + str(high_def_val) +
                              ". Please decrease the number of dice (or " +
                              "dice to keep) or the add value.")
+        # Check that the upper and lower roll limits are not impossible
+        if self.roll_low_limit is not None:
+            if self.roll_low_limit >= high_pos_val:
+                raise ValueError("The highest possible value is " +
+                             str(high_pos_val) + ", but the roll_low_limit " +
+                             "was selected as " + str(self.roll_low_limit) + 
+                             ". Please decrease the roll_low_limit.")
+        if self.roll_high_limit is not None: 
+            if self.roll_high_limit <= low_pos_val:
+                raise ValueError("The lowest possible value is " +
+                             str(low_pos_val) + ", but the roll_high_limit " +
+                             "was selected as " + str(self.roll_high_limit) + 
+                             ". Please decrease the roll_high_limit.")
 
     # This function will find a point buy mapping (dictionary) based on the
     # user-supplied string
@@ -139,7 +163,7 @@ class PBE:
     # rows equal to [num_hist] and columns equal to [num_ability]
     @staticmethod
     def _roll_array(num_hist, num_dice, dice_type, add_val, num_ability,
-                    best_dice, reroll):
+                    best_dice, reroll, roll_low_limit, roll_high_limit):
         abilities = []
         # Rolls the full array containing [num_ability] Ability Scores
         for _ in range(num_ability):
@@ -152,22 +176,34 @@ class PBE:
             # Sum the rolls together, and add the [add_val]
             result = np.add(attr.sum(axis=1), add_val)
             abilities.append(result)
-            # Return the stacked ability array
-        ability_array = np.column_stack(abilities)
-        return ability_array
+        stats = np.column_stack(abilities)       
+        # Remove all rolls lower than the low_limit. WARNING- this code 
+        # REMOVES an entire ability roll if ANY of its elements do not meet
+        # the criteria, instead of rerolling it. This can mean that there 
+        # may be a lot fewer rolls in the final array, so the number of 
+        # histories should be increased to compensate for the removed elements.
+        if roll_low_limit is not None:
+            stats = stats[(stats>=roll_low_limit).all(axis=1)]
+        # Remove all rolls higher than the high_limit. Same warning as above
+        if roll_high_limit is not None:
+            stats = stats[(stats<=roll_high_limit).all(axis=1)]
+        return stats
 
     # This function will roll multiple stat arrays, with dimensions:
     # raw_array = (num_arrays,num_hist,best_dice)
     # pbe_array = (num_hist,num_arrays)
     @staticmethod
     def _roll_arrays(num_hist, num_dice, dice_type, add_val, num_ability,
-                     best_dice, reroll, num_arrays, best_ability, vmap):
+                     best_dice, reroll, num_arrays, best_ability, vmap,
+                     roll_low_limit, roll_high_limit, pbe_low_limit, 
+                     pbe_high_limit):
         arrays = []
         arrays_pbe = []
         # Iterates over the number of arrays
         for _ in range(num_arrays):
             array_ = PBE._roll_array(num_hist, num_dice, dice_type, add_val,
-                                     num_ability, best_dice, reroll)
+                                     num_ability, best_dice, reroll, 
+                                     roll_low_limit, roll_high_limit)
             # Sorts the array- we will need this to determine the distributions
             # of the top ability score, second ability score, and so on
             array_ = np.sort(array_)
@@ -178,20 +214,36 @@ class PBE:
             array_pbe = np.sum(np.vectorize(vmap.__getitem__)(array_), axis=1)
             # Add to the list of arrays
             arrays.append(array_)
-            arrays_pbe.append(array_pbe)
-        # Return the stacked arrays
+            arrays_pbe.append(array_pbe)    
         raw_arrays = np.array(arrays)
         pbe_arrays = np.column_stack(arrays_pbe)
+        # Remove all pbe lower than the low_limit. WARNING- this code 
+        # REMOVES an entire ability roll if ANY of its elements do not meet
+        # the criteria, instead of rerolling it. This can mean that there 
+        # may be a lot fewer rolls in the final array, so the number of 
+        # histories should be increased to compensate for the removed elements.
+        if pbe_low_limit is not None:
+            keep_ind = (pbe_arrays>=pbe_low_limit).all(axis=1)
+            raw_arrays = raw_arrays[:, keep_ind]
+            pbe_arrays = pbe_arrays[keep_ind]
+        # Remove all rolls higher than the high_limit. Same warning as above
+        if pbe_high_limit is not None:
+            keep_ind = (pbe_arrays<=pbe_high_limit).all(axis=1)
+            raw_arrays = raw_arrays[:, keep_ind]
+            pbe_arrays = pbe_arrays[keep_ind]    
         return raw_arrays, pbe_arrays
-
+		
     # This function will roll multiple stat arrays and choose the one
     # with the highest PBE
     @staticmethod
     def _find_best_pbe(num_hist, num_dice, dice_type, add_val, num_ability,
-                       best_dice, reroll, num_arrays, best_ability, vmap):
+                       best_dice, reroll, num_arrays, best_ability, vmap,
+                       roll_low_limit, roll_high_limit, pbe_low_limit,
+                       pbe_high_limit):
         raw_arrays, pbe_arrays = PBE._roll_arrays(num_hist, num_dice,
             dice_type, add_val, num_ability, best_dice, reroll, num_arrays,
-            best_ability, vmap)
+            best_ability, vmap, roll_low_limit, roll_high_limit, pbe_low_limit,
+            pbe_high_limit)
         # Find the index of the array with the best PBE
         shp = raw_arrays.shape
         y, x = np.ogrid[0:shp[1], 0:shp[2]]
@@ -342,7 +394,8 @@ class PBE:
         self.arr_res, self.pbe_res = self._find_best_pbe(num_hist,
             self.num_dice, self.dice_type, self.add_val, self.num_attribute,
             self.keep_dice, self.reroll, self.num_arrays, self.keep_attribute,
-            self.pbe_map)
+            self.pbe_map, self.roll_low_limit, self.roll_high_limit,
+            self.pbe_low_limit, self.pbe_high_limit)
         return self
 
     def plot_histogram(self, title_prefix="", title_override="",

@@ -16,7 +16,7 @@ from pypbe.core import PBE
 class TestPBEInput(unittest.TestCase):
     def test_numdice_string_input(self):
         with self.assertRaises(ValueError):
-            pbe = PBE("wrong", 6)
+            PBE("wrong", 6)
 
     def test_uppercase_PBEmap(self):
         pbe = PBE(3, 6, pbe_map="PF")
@@ -26,44 +26,56 @@ class TestPBEInput(unittest.TestCase):
 
     def test_pbemap_int_input(self):
         with self.assertRaises(ValueError):
-            pbe = PBE(3, 6, pbe_map=4)
+            PBE(3, 6, pbe_map=4)
 
     def test_custompbemap_int_input(self):
         with self.assertRaises(TypeError):
-            pbe = PBE(3, 6, custom_pbe_map=4)
+            PBE(3, 6, custom_pbe_map=4)
 
     def test_keepdice_greater_numdice(self):
         with self.assertRaises(ValueError):
-            pbe = PBE(3, 6, keep_dice=4)
+            PBE(3, 6, keep_dice=4)
 
     def test_keepatt_greater_numatt(self):
         with self.assertRaises(ValueError):
-            pbe = PBE(3, 6, num_attribute=6, keep_attribute=7)
+            PBE(3, 6, num_attribute=6, keep_attribute=7)
 
     def test_rerolls_greater_dicetype(self):
         with self.assertRaises(ValueError):
-            pbe = PBE(3, 6, reroll=6)
+            PBE(3, 6, reroll=6)
 
     def test_lowval_default(self):
         with self.assertRaises(ValueError):
-            pbe = PBE(3, 6, add_val=-1)
+            PBE(3, 6, add_val=-1)
         with self.assertRaises(ValueError):
-            pbe = PBE(2, 6)
+            PBE(2, 6)
         with self.assertRaises(ValueError):
-            pbe = PBE(5, 6, keep_dice=2)
+            PBE(5, 6, keep_dice=2)
         with self.assertRaises(ValueError):
-            pbe = PBE(5, 6, keep_dice=3, add_val=-1)
+            PBE(5, 6, keep_dice=3, add_val=-1)
 
     def test_highval_default(self):
         with self.assertRaises(ValueError):
-            pbe = PBE(3, 6, add_val=1)
+            PBE(3, 6, add_val=1)
         with self.assertRaises(ValueError):
-            pbe = PBE(4, 6)
+            PBE(4, 6)
         with self.assertRaises(ValueError):
-            pbe = PBE(5, 6, keep_dice=4)
+            PBE(5, 6, keep_dice=4)
         with self.assertRaises(ValueError):
-            pbe = PBE(5, 6, keep_dice=3, add_val=1)
-
+            PBE(5, 6, keep_dice=3, add_val=1)
+    
+    def test_lowval_highrolllimit(self):
+        with self.assertRaises(ValueError):
+            PBE(3, 6, roll_high_limit = 2)
+        with self.assertRaises(ValueError):
+            PBE(2, 6, add_val=2, roll_high_limit=3)
+    
+    def test_highval_lowrolllimit(self):
+        with self.assertRaises(ValueError):
+            PBE(3, 6, roll_low_limit = 19)
+        with self.assertRaises(ValueError):
+            PBE(2, 6, add_val=1, roll_low_limit=14)
+    
 
 # These tests are for static methods in the main class, PBE
 # More work needs to be done. I did some manual verification of the guts
@@ -96,7 +108,7 @@ class TestStaticPBE(unittest.TestCase):
 
     # num_hist, num_dice, dice_type, add_val, num_ability, best_dice, reroll
     def test_rollArray_numHist_length(self):
-        test = PBE._roll_array(100, 4, 6, 2, 6, 3, 0)
+        test = PBE._roll_array(100, 4, 6, 2, 6, 3, 0, None, None)
         test_size = len(test)
         correct = 100
         self.assertEqual(test_size, correct)
@@ -159,6 +171,50 @@ class TestCasesPBE(unittest.TestCase):
         for ii, jj in zip(correct_means_raw, ar["means"]):
             self.assertAlmostEqual(ii, jj, places=1)
         correct_mean_pbe = 3.0
+        self.assertAlmostEqual(correct_mean_pbe, pb["means"], places=1)
+
+    def test_3d6_rolllowlimit(self):
+        pbe = PBE(3, 6, roll_low_limit=7)
+        pbe.roll_mc(int(10**6))
+        ar = pbe.arr_res
+        pb = pbe.pbe_res
+        correct_means_raw = [8.1, 9.2, 10.4, 11.5, 12.7, 14.4]
+        for ii, jj in zip(correct_means_raw, ar["means"]):
+            self.assertAlmostEqual(ii, jj, places=1)
+        correct_mean_pbe = 8.4
+        self.assertAlmostEqual(correct_mean_pbe, pb["means"], places=1)
+
+    def test_3d6_rollhighlimit(self):
+        pbe = PBE(3, 6, roll_high_limit=14)
+        pbe.roll_mc(int(10**6))
+        ar = pbe.arr_res
+        pb = pbe.pbe_res
+        correct_means_raw = [6.6, 8.3, 9.5, 10.7, 11.8, 12.9]
+        for ii, jj in zip(correct_means_raw, ar["means"]):
+            self.assertAlmostEqual(ii, jj, places=1)
+        correct_mean_pbe = -2.4
+        self.assertAlmostEqual(correct_mean_pbe, pb["means"], places=1)
+
+    def test_3d6_pbelowlimit(self):
+        pbe = PBE(3, 6, pbe_low_limit=5)
+        pbe.roll_mc(int(10**6))
+        ar = pbe.arr_res
+        pb = pbe.pbe_res
+        correct_means_raw = [7.8, 9.6, 10.9, 12.1, 13.5, 15.3]
+        for ii, jj in zip(correct_means_raw, ar["means"]):
+            self.assertAlmostEqual(ii, jj, places=1)
+        correct_mean_pbe = 12.7
+        self.assertAlmostEqual(correct_mean_pbe, pb["means"], places=1)
+
+    def test_3d6_pbehighlimit(self):
+        pbe = PBE(3, 6, pbe_high_limit=10)
+        pbe.roll_mc(int(10**6))
+        ar = pbe.arr_res
+        pb = pbe.pbe_res
+        correct_means_raw = [6.3, 8.1, 9.4, 10.6, 11.9, 13.7]
+        for ii, jj in zip(correct_means_raw, ar["means"]):
+            self.assertAlmostEqual(ii, jj, places=1)
+        correct_mean_pbe = -1.5
         self.assertAlmostEqual(correct_mean_pbe, pb["means"], places=1)
 
     def test_3d6_best3arrays(self):

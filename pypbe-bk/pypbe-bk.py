@@ -1,6 +1,6 @@
 ### PyPBE Bokeh Simulator
 ### Written By: Eric Strong
-### Last Updated: 2017/05/30
+### Last Updated: 2017/08/31
 
 from pypbe.core import PBE
 from bokeh.io import curdoc
@@ -28,6 +28,10 @@ d_ka, r_ka = 6, [1, 10, 1] # Attributes to Keep
 d_rr, r_rr = 0, [0, 11, 1] # Rerolls
 d_nar, r_nar = 1, [1, 10, 1] # Number of Arrays
 d_hi, r_hi = 4, [3, 5, 1] # Monte Carlo Histories
+d_rl, r_rl = 1, [1, 20, 1] # Roll lower limit
+d_rh, r_rh = 20, [1, 20, 1] # Roll higher limit
+d_pl, r_pl = -21, [-21, 30, 1] # PBE lower limit
+d_ph, r_ph = 61, [10, 61, 1] # PBE higher limit
 d_s, d_ss = "PF", ["PF", "3e", "4e", "5e"] # Systems
 
 ###-----------------------------------------------------------------------###
@@ -57,12 +61,12 @@ plot_ctls = column(plot_sim, plot_clear, label_logo)
 # User-Configurable Parameters
 up_title = Div(text="System:")
 up_sys = RadioButtonGroup(labels=d_ss, active=0)
-up_nd = Slider(title="Number of Dice Per Attribute ('X' in 'XdY+Z')", value=d_nd, 
-               start=r_nd[0], end=r_nd[1], step=r_nd[2])
+up_nd = Slider(title="Number of Dice Per Attribute ('X' in 'XdY+Z')", 
+               value=d_nd, start=r_nd[0], end=r_nd[1], step=r_nd[2])
 up_dt = Slider(title="Dice Sides ('Y' in 'XdY+Z')", value=d_dt, 
                start=r_dt[0], end=r_dt[1], step=r_dt[2])
-up_kd = Slider(title="Dice to Keep Per Attribute (best 'KdY' of 'XdY')", value=d_kd, 
-               start=r_kd[0], end=r_kd[1], step=r_kd[2])
+up_kd = Slider(title="Dice to Keep Per Attribute (best 'KdY' of 'XdY')", 
+               value=d_kd, start=r_kd[0], end=r_kd[1], step=r_kd[2])
 up_av = Slider(title="Modifier +/- ('Z' in 'XdY+Z')", value=d_av, 
                start=r_av[0], end=r_av[1], step=r_av[2])
 up_na = Slider(title="Number of Attributes (STR, INT, WIS, etc.)", value=d_na, 
@@ -75,8 +79,16 @@ up_nar = Slider(title="Number of Arrays (keeping the best one)", value=d_nar,
                 start=r_nar[0], end=r_nar[1], step=r_nar[2])
 up_hi = Slider(title="Monte Carlo Histories (10^Value)", value=d_hi, 
                start=r_hi[0], end=r_hi[1], step=r_hi[2])
+up_rl = Slider(title="Ability Score Lower Limit", value=d_rl, 
+               start=r_rl[0], end=r_rl[1], step=r_rl[2])
+up_rh = Slider(title="Ability Score Higher Limit", value=d_rh, 
+               start=r_rh[0], end=r_rh[1], step=r_rh[2])
+up_pl = Slider(title="PBE Lower Limit (-21=No Limit)", value=d_pl, 
+               start=r_pl[0], end=r_pl[1], step=r_pl[2])
+up_ph = Slider(title="PBE Higher Limit (61=No Limit)", value=d_ph, 
+               start=r_ph[0], end=r_ph[1], step=r_ph[2])
 up_ctls = widgetbox(up_title, up_sys, up_nd, up_dt, up_av, up_kd, up_na, up_ka, 
-                    up_rr, up_nar, up_hi)
+                    up_rr, up_nar, up_hi, up_rl, up_rh, up_pl, up_ph)
 # Data Tables
 dt_raw_title = Div(text="<b>Raw Roll Statistics</b>")
 dt_raw_cols = [TableColumn(field="mvs", title="Mean"),
@@ -101,7 +113,8 @@ dt_pbe = DataTable(source=source_dt_pbe, columns=dt_pbe_cols, editable=False,
 ### Equivalent functions.                                                 ###
 ###-----------------------------------------------------------------------###
 def sim(num_dice, dice_type, keep_dice, add_val, num_attr, keep_attr, reroll, 
-        num_arrays, num_hist, pbe_map):
+        num_arrays, num_hist, pbe_map, roll_low_limit, roll_high_limit,
+        pbe_low_limit, pbe_high_limit):
     # Error Checking
     if keep_dice > num_dice:
         plot_console.text = "ERROR: <br>Number of dice to keep cannot " + \
@@ -147,9 +160,25 @@ def sim(num_dice, dice_type, keep_dice, add_val, num_attr, keep_attr, reroll,
             "than 18. To resolve this issue, please decrease the number of dice to keep " + \
             "per attribute or the modifier so that the highest possible roll is no greater than 18."
         raise ValueError()
+    # Check that the upper and lower roll limits are not impossible    
+    if roll_low_limit is not None:
+        if roll_low_limit >= high_pos_val:
+            plot_console.text = "The highest possible value is " + \
+                             str(high_pos_val) + ", but the roll_low_limit " + \
+                             "was selected as " + str(roll_low_limit) + \
+                             ". Please decrease the roll_low_limit."
+            raise ValueError()
+    if roll_high_limit is not None: 
+        if roll_high_limit <= low_pos_val:
+            plot_console.text = "The lowest possible value is " + \
+                             str(low_pos_val) + ", but the roll_high_limit " + \
+                             "was selected as " + str(roll_high_limit) + \
+                             ". Please decrease the roll_high_limit."
+            raise ValueError()                       
     # Run the simulation
     pbe = PBE(num_dice, dice_type, add_val, num_attr, num_arrays, reroll,
-              keep_dice, keep_attr, pbe_map)
+              keep_dice, keep_attr, pbe_map, None, roll_low_limit, roll_high_limit,
+              pbe_low_limit, pbe_high_limit)
     pbe.roll_mc((int(10**num_hist)))    
     txtbox = pbe._build_text(pbe.arr_res["means"], pbe.arr_res["5percentile"],
                              pbe.arr_res["95percentile"])
@@ -175,7 +204,8 @@ def find_ranges(arr_res, pbe_res):
 ### be modified in the CALLBACKS section.                                 ###
 ###-----------------------------------------------------------------------###
 # Generating some initial data for the plots, based on the user defaults
-d_arr, d_pbe, tb = sim(d_nd, d_dt, d_kd, d_av, d_na, d_ka, d_rr, d_nar, d_hi, d_s)
+d_arr, d_pbe, tb = sim(d_nd, d_dt, d_kd, d_av, d_na, d_ka, d_rr, d_nar, d_hi, 
+                       d_s, None, None, None, None)
 maxval_pbe = 1.05 * max(d_pbe["raw_bins"][:, 1])
 # Defining the Bokeh data sources
 source_roll1 = CDS(data=dict(x=range(0,len(d_arr["raw_bins"][0])), 
@@ -269,11 +299,26 @@ def update_plot():
     num_arrays = up_nar.value
     num_hist = up_hi.value
     pbe_map = d_ss[up_sys.active]
+    roll_low_limit = up_rl.value
+    roll_high_limit = up_rh.value
+    pbe_low_limit = up_pl.value
+    pbe_high_limit = up_ph.value
+    # Use the far end of the scales in the sliders indicates no limit
+    if roll_low_limit == 1:
+        roll_low_limit = None
+    if roll_high_limit == 20:
+        roll_high_limit = None    
+    if pbe_low_limit == -21:
+        pbe_low_limit = None
+    if pbe_high_limit == 61:
+        pbe_high_limit = None          
     # Update Sources. This code is awful. There's got to be a better way to
     # do this, but having to support between 1-8 lines seems difficult with
     # Bokeh.
-    arr_res, pbe_res, txt = sim(num_dice, dice_type, keep_dice, add_val, num_attr,
-                                keep_attr, reroll, num_arrays, num_hist, pbe_map)
+    arr_res, pbe_res, txt = sim(num_dice, dice_type, keep_dice, add_val, 
+                                num_attr, keep_attr, reroll, num_arrays, 
+                                num_hist, pbe_map, roll_low_limit,
+                                roll_high_limit, pbe_low_limit, pbe_high_limit)
     maxval_pbe2 = 1.05 * max(pbe_res["raw_bins"][:, 1])
     # This code hurt me to write, emotionally
     if len(arr_res["raw_bins"])>0:
