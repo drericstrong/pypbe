@@ -3,7 +3,7 @@
 =============================
 A Bokeh server is currently running on Heroku:
 
-.. PyPBE Bokeh Server:: https://pypbe.herokuapp.com/pypbe-bk
+https://pypbe.herokuapp.com/pypbe-bk
 
 .. image:: https://github.com/drericstrong/pypbe/blob/master/images/pypbe-bk_screenshot.png?raw=true
 
